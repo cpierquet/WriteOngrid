@@ -1,0 +1,359 @@
+% !TeX TXS-program:compile = txs:///arara
+% arara: pdflatex: {shell: yes, synctex: no, interaction: batchmode}
+% arara: pdflatex: {shell: yes, synctex: no, interaction: batchmode} if found('log', '(undefined references|Please rerun|Rerun to get)')
+
+\documentclass[a4paper]{article}
+\usepackage[svgnames]{xcolor}
+\usepackage[french]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{writeongrid}
+\usetikzlibrary{decorations.pathreplacing}
+\usepackage{amsmath,amssymb}
+\usepackage{fontawesome5}
+\usepackage{enumitem}
+\usepackage{frcursive}
+\usepackage{tabularray}
+\usepackage{fancyvrb}
+\usepackage{fancyhdr}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\lfoot{\sffamily\small [WriteOnGrid]}
+\cfoot{\sffamily\small - \thepage{} -}
+\rfoot{\hyperlink{matoc}{\small\faArrowAltCircleUp[regular]}}
+
+\usepackage{hvlogos}
+\usepackage{hyperref}
+\urlstyle{same}
+\hypersetup{pdfborder=0 0 0}
+\usepackage[margin=1.5cm]{geometry}
+\setlength{\parindent}{0pt}
+\definecolor{LightGray}{gray}{0.9}
+
+\def\TPversion{0.1.0}
+\def\TPdate{16/01/2023}
+
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{minted}
+\NewTCBListing{PresentationCode}{ O{blue} m }{%
+	sharp corners=downhill,enhanced,arc=12pt,skin=bicolor,%
+	colback=#1!1!white,colframe=#1!75!black,colbacklower=white,%
+	attach boxed title to top right={yshift=-\tcboxedtitleheight},title=Code \LaTeX,%
+	boxed title style={%
+		colframe=#1!75!black,colback=#1!15!white,%
+		,sharp corners=downhill,arc=12pt,%
+	},%
+	fonttitle=\color{#1!90!black}\itshape\ttfamily\footnotesize,%
+	listing engine=minted,minted style=colorful,
+	minted language=tex,minted options={tabsize=4,fontsize=\footnotesize,autogobble},
+	#2
+}
+
+\newcommand\Cle[1]{{\bfseries\sffamily\textlangle #1\textrangle}}
+
+\begin{document}
+
+\pagestyle{fancy}
+
+\thispagestyle{empty}
+
+\vspace{2cm}
+
+\begin{center}
+	\begin{minipage}{0.75\linewidth}
+	\begin{tcolorbox}[colframe=yellow,colback=yellow!15]
+		\begin{center}
+			\begin{tabular}{c}
+				{\Huge \texttt{WriteOnGrid [en]}}\\
+				\\
+				{\LARGE To write on lines} \\
+				{\LARGE of a grid.}
+			\end{tabular}
+			
+			\medskip
+			
+			{\small \texttt{Version \TPversion{} -- \TPdate}}
+		\end{center}
+	\end{tcolorbox}
+\end{minipage}
+\end{center}
+
+\vspace{0.5cm}
+
+\begin{center}
+	\begin{tabular}{c}
+	\texttt{Cédric Pierquet}\\
+	{\ttfamily c pierquet -- at -- outlook . fr}\\
+	\texttt{\url{https://github.com/cpierquet/WriteOnGrid}}
+\end{tabular}
+\end{center}
+
+\vspace{0.5cm}
+
+{$\blacktriangleright$~~Some commands to create a grid (5x5 or Seyes) and to write \og on \fg{} the lines.}
+
+\smallskip
+
+{$\blacktriangleright$~~Possibility to personnalize size, margins, ...}
+
+\vspace{1cm}
+
+\begin{center}
+	\begin{EnvGrid}[NumSquares=22x8]
+	\WriteLine{my text on line 1\ldots}
+	\WriteLine<center>{my centered text on line 2\ldots}
+	\WriteLine<right>{my right-align text on ligne 3\ldots}
+	\WriteLine[OffsetH=2]{my 2-squares shifted text on line 4\ldots}
+	\PassLine
+	\WriteLine{\sffamily my text, sans serif, on line 6\ldots}
+	\WriteLine[OffsetH=-1]{\small\cursive my -1-square shifted text on line 7\ldots}
+\end{EnvGrid}
+\end{center}
+
+\begin{EnvGrid}[NumSquares=24x5,Margin=1,Enlarge=2/2,Seyes]
+	\WriteLine[Scale=1.5]{\textcolor{red}{my text on line 1\ldots}}
+	\WriteLine[Scale=1.5]{\textcolor{blue}{my text on line 2\ldots}}
+	\WriteLine[Scale=1.5,OffsetH=-1]{$1+\frac{1}{2}=\frac32$ et $(1+x)^2=1+2x+x^2$ on line 3\ldots}
+	\WriteLine[Scale=1.5]{\cursive my text on line 4\ldots}
+\end{EnvGrid}
+
+\vspace{0.5cm}
+
+%\hfill{}\textit{Merci à Denis Bitouzé et à Patrick Bideault pour leurs retours et idées !}
+
+\vfill
+
+\hrule
+
+\medskip
+
+\begin{tblr}{width=\linewidth,colspec={X[c]X[c]X[c]X[c]X[c]X[c]},cells={font=\sffamily}}
+{\huge \LaTeX} & & & & &\\
+& {\huge \pdfLaTeX} & & & & \\
+& & {\huge \LuaLaTeX} & & & \\
+& & & {\huge \TikZ} & & \\
+& & & & {\huge \TeXLive} & \\
+& & & & & {\huge \MiKTeX} \\
+\end{tblr}
+
+\medskip
+
+\hrule
+
+\medskip
+
+\newpage
+
+\part*{Introduction}
+
+\section{The package}
+
+\subsection{Loading of the package, used packages}
+
+The package \textsf{writeongrid} loads within the preamble :
+
+\begin{PresentationCode}{listing only}
+\usepackage{writeongrid}
+\end{PresentationCode}
+
+It’s mostly compatible with \textsf{latex}, \textsf{pdflatex}, \textsf{lualatex} or \textsf{xelatex} compilation !
+
+\medskip
+
+It loads the following packages and libraries :
+
+\begin{itemize}
+	\item \texttt{tikz} with the librairies \Cle{calc} and \Cle{positionning} ;
+	\item \texttt{xstring}, \texttt{xparse} and \texttt{simplekv}.
+\end{itemize}
+
+\subsection{The package itself}
+
+The idea is to, thanks to TikZ, propose commands and environment to work with a grid, and to write on the lines.
+
+\begin{PresentationCode}{listing only}
+%environment, with keys to prepare the grid
+%commands to write or pass a line
+
+\begin{EnvGrid}[keys]<color>
+	\WriteLine[keys]<alignment>{text}
+	\PassLine
+\end{EnvGrid}
+\end{PresentationCode}
+
+\subsection{Overall functioning}
+
+The grid is given by the number of squares (nbCol$\times$nbRow), and after we can adjust with \textit{overtakings} to enlarge the grid onto the margins of the paper (left or right). We can also \textit{adjust} the global margin, to begin the lines differently.
+
+\medskip
+
+For example, a $5\times5$ grid :
+
+\begin{itemize}
+	\item with a size 24x5 squares ;
+	\item with an overtaking by \textcolor{red}{2 squares at the left} and \textcolor{blue}{3 squares at the right} ;
+	\item with a global margin of \textcolor{orange}{1 square} ;
+	\item with a \textcolor{ForestGreen}{\textit{border}} to show the \textit{basis} grid.
+\end{itemize}
+
+\medskip
+
+\begin{tikzpicture}
+	\useasboundingbox (0,0) rectangle ({0.5*24},{-0.5*5}) ;
+	\draw[xstep=0.5,ystep=0.5,thin,lightgray!75] ({-0.5*2},0) grid ({0.5*24+0.5*3},{-0.5*5}) ;
+	\draw[thick,decorate,decoration={brace,amplitude=8pt,mirror}](0,{-0.5*5-0.25})--({0.5*24},{-0.5*5-0.25}) node[midway,below=8pt,font=\small\sffamily] {24C} ;
+	\draw[red,thick,decorate,decoration={brace,amplitude=8pt,mirror}] ({-2*0.5},{-0.5*5-0.25})--({0},{-0.5*5-0.25}) node[midway,below=8pt,font=\small\sffamily] {2C} ;
+	\draw[blue,thick,decorate,decoration={brace,amplitude=8pt,mirror}] ({0.5*24},{-0.5*5-0.25})--({0.5*24+3*0.5},{-0.5*5-0.25}) node[midway,below=8pt,font=\small\sffamily] {3C} ;
+	\draw[thick,decorate,decoration={brace,amplitude=8pt}] ({0.5*24+3*0.5+0.25},0)--({0.5*24+3*0.5+0.25},{-0.5*5}) node[midway,right=8pt,font=\small\sffamily] {5C} ;
+	\draw[very thick,orange,densely dashed] ({0.5*1},0)--({0.5*1},{-0.5*5}) ;
+	\draw[ForestGreen,thick] (0,0) rectangle ({0.5*24},{-0.5*5}) ;
+\end{tikzpicture}
+
+\vspace{1.5cm}
+
+The \texttt{tikzpicture} is \textit{bounded} by the \textcolor{ForestGreen}{\textit{border}}, in order to specify overtakings or alignment.
+
+\medskip
+
+Le left-border of the \textcolor{ForestGreen}{\textit{border}} is aligned on the left-margin of the page, so take care of the \texttt{\textbackslash parindent}.
+
+\pagebreak
+
+\section{Commands, keys and options}
+
+\subsection{The environement}
+
+\begin{PresentationCode}{listing only}
+%environment, with keys to prepare the grid
+
+\begin{EnvGrid}[keys]<color>
+	...
+\end{EnvGrid}
+\end{PresentationCode}
+
+The first argument, \textit{optional}, between \texttt{[...]} give the \Cle{keys} :
+
+\begin{itemize}
+	\item \Cle{NumSwuares} to specify the size of the grid, under \texttt{(nbCol)x(nbRow)} ; \hfill~default : \Cle{17x5}
+	\item \Cle{Unit} to specify the scale of the grid ; \hfill~default : \Cle{1}
+	\item \Cle{Margin} to specify the global \textcolor{orange}{margin} at the beginning of the lines ; \hfill~default : \Cle{0}
+	\item \Cle{Enlarge} to specify the squares-overtakings, globally with \texttt{\textcolor{red}{L}\textcolor{blue}{R}} or side by side with \texttt{\textcolor{red}{L}/\textcolor{blue}{R}} ;\hfill~default : \Cle{0}
+	\item the boolean \Cle{Border} to display the basis border of the grid ;\hfill~default : \Cle{false}
+	\item the boolean \Cle{Seyes} to work with a Seyes grid.\hfill~default : \Cle{false}
+\end{itemize}
+
+The second argument, \textit{optional}, between \texttt{<...>} is the major color of the grid, \Cle{lightgray} by default.
+
+\medskip
+
+\begin{PresentationCode}{listing only}
+%the borders are added to show the basis grid
+
+%30x5 small squares, w/o overtakings, basis color
+\begin{EnvGrid}[NumSquares=30x5]
+\end{EnvGrid}
+
+%36x8 small squares, overtakings 3/3, LightSteelBlue color
+\begin{EnvGrid}[NumSquares=36x8,Enlarge=3/3]<LightSteelBlue>
+\end{EnvGrid}
+
+%15x5 big squares, overtakings 1/2, orange, centered
+\begin{center}
+	\begin{EnvGrid}[NumSquares=15x5,Enlarge=1/2,Seyes]<orange>
+	\end{EnvGrid}
+\end{center}
+\end{PresentationCode}
+
+\medskip
+
+\begin{EnvGrid}[NumSquares=30x5,Border]
+\end{EnvGrid}
+
+\smallskip
+
+\begin{EnvGrid}[NumSquares=36x8,Enlarge=3/3,Border]<LightSteelBlue>
+\end{EnvGrid}
+
+\begin{center}
+	\begin{EnvGrid}[NumSquares=15x5,Enlarge=1/2,Seyes,Border]<orange>
+	\end{EnvGrid}
+\end{center}
+
+\pagebreak
+
+\subsection{Write on the lines}
+
+The idea is to write on the created grid. In order to write \textit{right} on the lines, we can :
+
+\begin{itemize}
+	\item give the lines one by one ;
+	\item avoid using multilines paragraps, items ;
+	\item pass a line.
+\end{itemize}
+
+\begin{PresentationCode}{listing only}
+...
+	%to write the lines, one by one
+	\WriteLine[keys]<alignment>{text}
+	%to pass the ligne
+	\PassLine
+...
+\end{PresentationCode}
+
+The fisrt argument, \textit{optional}, between \texttt{[...]} give the \Cle{keys} :
+
+\begin{itemize}
+	\item \Cle{OffsetH}, in squares, to shift the text from the \textcolor{orange}{margin} ; \hfill~default : \Cle{0}
+	\item \Cle{OffsetV} to shift vertically the line ; \hfill~default : \Cle{0pt}
+	\item \Cle{Scale} to specify the scale of the given text.\hfill~default : \Cle{1}
+\end{itemize}
+
+the second argument, \textit{optional}, between \texttt{<...>} is the horizontal alignment (\Cle{left/center/right}) of the text in the basis \textcolor{ForestGreen}{\textit{border}}, \Cle{left} by default.
+
+\medskip
+
+Le third argument, \textit{mandatory} and between \texttt{\{...\}} is the text, eventually with options.
+
+\begin{PresentationCode}{listing only}
+\begin{EnvGrid}[NumSquares=36x8]
+	\WriteLine{my text on ligne 1\ldots}
+	\WriteLine<center>{\ttfamily my tetetype text centered on line 2\ldots}
+	\WriteLine<right>{right-align text on line 3\ldots}
+	\WriteLine[OffsetH=0.1]{\textcolor{red}{red text, 1mm-shifted\ldots}}
+	\PassLine
+	\WriteLine[Scale=0.5]{\sffamily sans serif text, reduced by 50\,\%, on line 6\ldots}
+	\WriteLine[OffsetH=3]{\cursive 3 squares-shited text\ldots}
+\end{EnvGrid}
+\end{PresentationCode}
+
+\begin{EnvGrid}[NumSquares=36x8]
+	\WriteLine{my text on ligne 1\ldots}
+	\WriteLine<center>{\ttfamily my tetetype text centered on line 2\ldots}
+	\WriteLine<right>{right-align text on line 3\ldots}
+	\WriteLine[OffsetH=0.1]{\textcolor{red}{red text, 1mm-shifted\ldots}}
+	\PassLine
+	\WriteLine[Scale=0.5]{\sffamily sans serif text, reduced by 50\,\%, on line 6\ldots}
+	\WriteLine[OffsetH=3]{\cursive 3 squares-shited text\ldots}
+\end{EnvGrid}
+
+\begin{PresentationCode}{listing only}
+\begin{EnvGrid}[NumSquares=22x4,Margin=1,Enlarge=2/3,Seyes,Border]
+	\WriteLine[Scale=1.5]{\textcolor{red}{red text on line 1\ldots}}
+	\WriteLine[Scale=1.15,OffsetH=1]{$(1+x)^2=1+2x+x^2$ on line 2, with 1-square offset\ldots}
+	\WriteLine[OffsetH=-1]{\textcolor{blue}{blue text, back to left, on line 3\ldots}}
+\end{EnvGrid}
+
+\end{PresentationCode}
+\begin{EnvGrid}[NumSquares=22x4,Margin=1,Enlarge=2/3,Seyes,Border]
+	\WriteLine[Scale=1.5]{\textcolor{red}{red text on line 1\ldots}}
+	\WriteLine[Scale=1.15,OffsetH=1]{$(1+x)^2=1+2x+x^2$ on line 2, with 1-square offset\ldots}
+	\WriteLine[OffsetH=-1]{\textcolor{blue}{blue text, back to left, on line 3\ldots}}
+\end{EnvGrid}
+
+\newpage
+
+\part*{History}
+
+\verb|v0.1.0|~:~~~~Initial version
+
+\end{document}

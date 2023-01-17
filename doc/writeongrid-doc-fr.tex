@@ -1,0 +1,359 @@
+% !TeX TXS-program:compile = txs:///arara
+% arara: pdflatex: {shell: yes, synctex: no, interaction: batchmode}
+% arara: pdflatex: {shell: yes, synctex: no, interaction: batchmode} if found('log', '(undefined references|Please rerun|Rerun to get)')
+
+\documentclass[a4paper]{article}
+\usepackage[svgnames]{xcolor}
+\usepackage[french]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{writeongrid}
+\usetikzlibrary{decorations.pathreplacing}
+\usepackage{amsmath,amssymb}
+\usepackage{fontawesome5}
+\usepackage{enumitem}
+\usepackage{frcursive}
+\usepackage{tabularray}
+\usepackage{fancyvrb}
+\usepackage{fancyhdr}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\lfoot{\sffamily\small [WriteOnGrid]}
+\cfoot{\sffamily\small - \thepage{} -}
+\rfoot{\hyperlink{matoc}{\small\faArrowAltCircleUp[regular]}}
+
+\usepackage{hvlogos}
+\usepackage{hyperref}
+\urlstyle{same}
+\hypersetup{pdfborder=0 0 0}
+\usepackage[margin=1.5cm]{geometry}
+\setlength{\parindent}{0pt}
+\definecolor{LightGray}{gray}{0.9}
+
+\def\TPversion{0.1.0}
+\def\TPdate{16 Janvier 2023}
+
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{minted}
+\NewTCBListing{PresentationCode}{ O{blue} m }{%
+	sharp corners=downhill,enhanced,arc=12pt,skin=bicolor,%
+	colback=#1!1!white,colframe=#1!75!black,colbacklower=white,%
+	attach boxed title to top right={yshift=-\tcboxedtitleheight},title=Code \LaTeX,%
+	boxed title style={%
+		colframe=#1!75!black,colback=#1!15!white,%
+		,sharp corners=downhill,arc=12pt,%
+	},%
+	fonttitle=\color{#1!90!black}\itshape\ttfamily\footnotesize,%
+	listing engine=minted,minted style=colorful,
+	minted language=tex,minted options={tabsize=4,fontsize=\footnotesize,autogobble},
+	#2
+}
+
+\newcommand\Cle[1]{{\bfseries\sffamily\textlangle #1\textrangle}}
+
+\begin{document}
+
+\pagestyle{fancy}
+
+\thispagestyle{empty}
+
+\vspace{2cm}
+
+\begin{center}
+	\begin{minipage}{0.75\linewidth}
+	\begin{tcolorbox}[colframe=yellow,colback=yellow!15]
+		\begin{center}
+			\begin{tabular}{c}
+				{\Huge \texttt{WriteOnGrid [fr]}}\\
+				\\
+				{\LARGE Pour écrire sur les} \\
+				{\LARGE lignes d'une grille.}
+			\end{tabular}
+			
+			\medskip
+			
+			{\small \texttt{Version \TPversion{} -- \TPdate}}
+		\end{center}
+	\end{tcolorbox}
+\end{minipage}
+\end{center}
+
+\vspace{0.5cm}
+
+\begin{center}
+	\begin{tabular}{c}
+	\texttt{Cédric Pierquet}\\
+	{\ttfamily c pierquet -- at -- outlook . fr}\\
+	\texttt{\url{https://github.com/cpierquet/WriteOnGrid}}
+\end{tabular}
+\end{center}
+
+\vspace{0.5cm}
+
+{$\blacktriangleright$~~Quelques commandes créer une grille (5x5 ou Seyes) et écrire \og sur \fg{} les lignes.}
+
+\smallskip
+
+{$\blacktriangleright$~~Personnalisation de la taille de la grille, des marges, etc.}
+
+\vspace{1cm}
+
+\begin{center}
+	\begin{EnvQuadrillage}[NbCarreaux=22x8]
+	\EcrireLigne{mon texte sur la ligne 1\ldots}
+	\EcrireLigne<center>{mon texte centré sur la ligne 2\ldots}
+	\EcrireLigne<right>{mon texte aligné à droite sur la ligne 3\ldots}
+	\EcrireLigne[DecalH=2]{mon texte décalé de 2 carreaux sur la ligne 4\ldots}
+	\PasseLigne
+	\EcrireLigne{\sffamily mon texte sur la ligne 6\ldots}
+	\EcrireLigne[DecalH=-1]{\small\cursive mon texte, décalé à gauche de 1 carreau, sur la ligne 7\ldots}
+\end{EnvQuadrillage}
+\end{center}
+
+\begin{EnvQuadrillage}[NbCarreaux=24x5,Marge=1,Elargir=2/2,Seyes]
+	\EcrireLigne[Echelle=1.5]{\textcolor{red}{mon texte sur la ligne 1\ldots}}
+	\EcrireLigne[Echelle=1.5]{\textcolor{blue}{mon texte sur la ligne 2\ldots}}
+	\EcrireLigne[Echelle=1.5,DecalH=-1]{$1+\frac{1}{2}=\frac32$ et $(1+x)^2=1+2x+x^2$ sur la ligne 3\ldots}
+	\EcrireLigne[Echelle=1.5]{\cursive mon texte sur la ligne 4\ldots}
+\end{EnvQuadrillage}
+
+\vspace{0.5cm}
+
+%\hfill{}\textit{Merci à Denis Bitouzé et à Patrick Bideault pour leurs retours et idées !}
+
+\vfill
+
+\hrule
+
+\medskip
+
+\begin{tblr}{width=\linewidth,colspec={X[c]X[c]X[c]X[c]X[c]X[c]},cells={font=\sffamily}}
+{\huge \LaTeX} & & & & &\\
+& {\huge \pdfLaTeX} & & & & \\
+& & {\huge \LuaLaTeX} & & & \\
+& & & {\huge \TikZ} & & \\
+& & & & {\huge \TeXLive} & \\
+& & & & & {\huge \MiKTeX} \\
+\end{tblr}
+
+\medskip
+
+\hrule
+
+\medskip
+
+\newpage
+
+\part*{Introduction}
+
+\section{Le package writeongrid}
+
+\subsection{Chargement du package, packages utilisés}
+
+Le package \textsf{writeongrid} se charge dans le préambule via la commande :
+
+\begin{PresentationCode}{listing only}
+\usepackage{writeongrid}
+\end{PresentationCode}
+
+Il est compatible avec les compilations usuelles en \textsf{latex}, \textsf{pdflatex}, \textsf{lualatex} ou \textsf{xelatex}.
+
+\medskip
+
+Il charge les packages et librairies suivantes :
+
+\begin{itemize}
+	\item \texttt{tikz} avec les librairies \Cle{calc} et \Cle{positionning} ;
+	\item \texttt{xstring}, \texttt{xparse} et  \texttt{simplekv}.
+\end{itemize}
+
+\subsection{\og Philosophie \fg{} du package}
+
+L'idée est de proposer, grâce à \TikZ, des \textsf{commandes} et \textsf{environnements} pour travailler sur un quadrillage et écrire \og sur les lignes \fg.
+
+\begin{PresentationCode}{listing only}
+%environnement francisé, avec clés en français pour préparer la grille
+%commandes pour placer ou passer une ligne
+
+\begin{EnvQuadrillage}[clés]<couleur>
+	\EcrireLigne[clés]<alignement>{texte}
+	\PasseLigne
+\end{EnvQuadrillage}
+\end{PresentationCode}
+
+\subsection{Fonctionnement global}
+
+La grille est créée en spécifiant le nombre de carreaux (sous la forme nbCol$\times$nbLig), et on peut ensuite spécifier des \textit{débordements} latéraux pour éventuellement étendre le quadrillage dans les marges (gauche et droite). On peut également \textit{jouer} sur la marge, pour commencer les lignes à un niveau donné.
+
+\medskip
+
+Ci-dessous on représente une grille $5\times5$ :
+
+\begin{itemize}
+	\item de taille 24x5 ;
+	\item avec un élargissement de \textcolor{red}{2 carreaux à gauche} et \textcolor{blue}{3 carreaux à droite} ;
+	\item en commençant à écrire au niveau du \textcolor{orange}{1\up{er} carreau} ;
+	\item un \textcolor{ForestGreen}{\textit{cadre}} est rajouté pour visualiser la grille \textit{de base}.
+\end{itemize}
+
+\medskip
+
+\begin{tikzpicture}
+	\useasboundingbox (0,0) rectangle ({0.5*24},{-0.5*5}) ;
+	\draw[xstep=0.5,ystep=0.5,thin,lightgray!75] ({-0.5*2},0) grid ({0.5*24+0.5*3},{-0.5*5}) ;
+	\draw[thick,decorate,decoration={brace,amplitude=8pt,mirror}](0,{-0.5*5-0.25})--({0.5*24},{-0.5*5-0.25}) node[midway,below=8pt,font=\small\sffamily] {24C} ;
+	\draw[red,thick,decorate,decoration={brace,amplitude=8pt,mirror}] ({-2*0.5},{-0.5*5-0.25})--({0},{-0.5*5-0.25}) node[midway,below=8pt,font=\small\sffamily] {2C} ;
+	\draw[blue,thick,decorate,decoration={brace,amplitude=8pt,mirror}] ({0.5*24},{-0.5*5-0.25})--({0.5*24+3*0.5},{-0.5*5-0.25}) node[midway,below=8pt,font=\small\sffamily] {3C} ;
+	\draw[thick,decorate,decoration={brace,amplitude=8pt}] ({0.5*24+3*0.5+0.25},0)--({0.5*24+3*0.5+0.25},{-0.5*5}) node[midway,right=8pt,font=\small\sffamily] {5C} ;
+	\draw[very thick,orange,densely dashed] ({0.5*1},0)--({0.5*1},{-0.5*5}) ;
+	\draw[ForestGreen,thick] (0,0) rectangle ({0.5*24},{-0.5*5}) ;
+\end{tikzpicture}
+
+\vspace{1.5cm}
+
+Il est à noter que le figure \texttt{tikzpicture} est \textit{délimitée} par le \textcolor{ForestGreen}{\textit{cadre}}, afin de pouvoir gérer les débordements et l'alignement de l'environnement !
+
+\medskip
+
+De plus, le bord gauche du \textcolor{ForestGreen}{\textit{cadre}} est aligné sur la marge gauche de la page, donc la position du quadrillage dépend en partie de la configuration de \texttt{\textbackslash parindent}.
+
+\pagebreak
+
+\section{Commandes, clés et options}
+
+\subsection{L'environnement}
+
+\begin{PresentationCode}{listing only}
+%environnement francisé, avec clés en français pour préparer la grille
+
+\begin{EnvQuadrillage}[clés]<couleur>
+	...
+\end{EnvQuadrillage}
+\end{PresentationCode}
+
+Le premier argument, \textit{optionnel}, entre \texttt{[...]} propose les \Cle{clés} :
+
+\begin{itemize}
+	\item \Cle{NbCarreaux} pour spécifier le nombre de carreaux, sous la forme \texttt{(nbCol)x(nbLig)} ; \hfill~défaut : \Cle{17x5}
+	\item \Cle{Unite} pour spécifier l'échelle de la figure ; \hfill~défaut : \Cle{1}
+	\item \Cle{Marge} pour spécifier la \textcolor{orange}{marge} du début des lignes ; \hfill~défaut : \Cle{0}
+	\item \Cle{Elargir} pour préciser les carreaux de débordements, sous la forme unique \texttt{\textcolor{red}{G}\textcolor{blue}{D}} ou par côté \texttt{\textcolor{red}{G}/\textcolor{blue}{D}} ;\hfill~défaut : \Cle{0}
+	\item le booléen \Cle{Cadre} pour afficher le cadre de base du quadrillage ;\hfill~défaut : \Cle{false}
+	\item le booléen \Cle{Seyes} pour afficher un quadrillage de type Seyes.\hfill~défaut : \Cle{false}
+\end{itemize}
+
+Le second argument, \textit{optionnel}, entre \texttt{<...>} est quant à lui la couleur de base du quadrillage, \Cle{lightgray} par défaut.
+
+\medskip
+
+\begin{PresentationCode}{listing only}
+%les cadres ont été rajoutés pour la sortie
+
+%30x5 petits carreaux, sans dépassement, couleur de base
+\begin{EnvQuadrillage}[NbCarreaux=30x5]
+\end{EnvQuadrillage}
+
+%36x8 petits carreaux, avec débordements 3/3, couleur LightSteelBlue
+\begin{EnvQuadrillage}[NbCarreaux=36x8,Elargir=3/3]<LightSteelBlue>
+\end{EnvQuadrillage}
+
+%15x5 grand carreaux, avec débordements 1/2, couleur orange, centré
+\begin{center}
+	\begin{EnvQuadrillage}[NbCarreaux=15x5,Elargir=1/2,Seyes]<orange>
+	\end{EnvQuadrillage}
+\end{center}
+\end{PresentationCode}
+
+\medskip
+
+\begin{EnvQuadrillage}[NbCarreaux=30x5,Cadre]
+\end{EnvQuadrillage}
+
+\smallskip
+
+\begin{EnvQuadrillage}[NbCarreaux=36x8,Elargir=3/3,Cadre]<LightSteelBlue>
+\end{EnvQuadrillage}
+
+\begin{center}
+	\begin{EnvQuadrillage}[NbCarreaux=15x5,Elargir=1/2,Seyes,Cadre]<orange>
+\end{EnvQuadrillage}
+\end{center}
+
+\pagebreak
+
+\subsection{Écrire sur les lignes}
+
+L'idée est maintenant de pouvoir écrire sur les lignes du quadrillage créé, et pour garantir le fait d'écrire \textit{pile} sur le ligne, on applique les recommandations suivantes :
+
+\begin{itemize}
+	\item les lignes doivent être saisies une par une, du \og haut \fg{} vers le \og bas \fg{} ;
+	\item pas de paragraphe \textit{multilignes}, pas de puce ou de numérotation ;
+	\item une ligne peut être passée.
+\end{itemize}
+
+\begin{PresentationCode}{listing only}
+...
+	%pour saisir les lignes, une par une
+	\EcrireLigne[clés]<alignement>{texte}
+	%pour passer la ligne
+	\PasseLigne
+...
+\end{PresentationCode}
+
+Le premier argument, entre \texttt{[...]} propose les \Cle{clés} :
+
+\begin{itemize}
+	\item \Cle{DecalH} pour spécifier le décalage horizontal (en carreaux) de la ligne, par rapport à la \textcolor{orange}{marge} ; \hfill~défaut : \Cle{0}
+	\item \Cle{DecalV} pour spécifier le décalage vertical du texte par rapport à la ligne ; \hfill~défaut : \Cle{0pt}
+	\item \Cle{Echelle} pour spécifier l'échelle du texte à écrire.\hfill~défaut : \Cle{1}
+\end{itemize}
+
+Le deuxième argument, \textit{optionnel}, entre \texttt{<...>} permet de spécifier l'alignement horizontal (parmi \Cle{left/center/right}) du texte dans le \textcolor{ForestGreen}{\textit{cadre}} de base, \Cle{left} par défaut.
+
+\medskip
+
+Le troisième argument, \textit{mandataire} et entre \texttt{\{...\}} est quant à lui le texte à saisir, avec possibilité de spécifier taille, couleur, fonte, etc
+
+\begin{PresentationCode}{listing only}
+\begin{EnvQuadrillage}[NbCarreaux=36x8]
+	\EcrireLigne{mon texte sur la ligne 1\ldots}
+	\EcrireLigne<center>{\ttfamily mon texte, en fonte teletype augmentée de 25\,\%, centré sur la ligne 2\ldots}
+	\EcrireLigne<right>{mon texte aligné à droite sur la ligne 3\ldots}
+	\EcrireLigne[DecalV=0.1]{\textcolor{red}{mon texte rouge sur la ligne 4, décalé de 1mm vers le haut\ldots}}
+	\PasseLigne
+	\EcrireLigne[Echelle=0.5]{\sffamily mon texte, en fonte sans réduite de 50\,\%, sur la ligne 6\ldots}
+	\EcrireLigne[DecalH=3]{\cursive mon texte sur la ligne 7, décalé de 3 carreaux\ldots}
+\end{EnvQuadrillage}
+\end{PresentationCode}
+
+\begin{EnvQuadrillage}[NbCarreaux=36x8]
+	\EcrireLigne{mon texte sur la ligne 1\ldots}
+	\EcrireLigne<center>{\ttfamily mon texte, en fonte teletype augmentée de 25\,\%, centré sur la ligne 2\ldots}
+	\EcrireLigne<right>{mon texte aligné à droite sur la ligne 3\ldots}
+	\EcrireLigne[DecalV=0.1]{\textcolor{red}{mon texte rouge sur la ligne 4, décalé de 1mm vers le haut\ldots}}
+	\PasseLigne
+	\EcrireLigne[Echelle=0.5]{\sffamily mon texte, en fonte sans réduite de 50\,\%, sur la ligne 6\ldots}
+	\EcrireLigne[DecalH=3]{\cursive mon texte sur la ligne 7, décalé de 3 carreaux\ldots}
+\end{EnvQuadrillage}
+
+\begin{PresentationCode}{listing only}
+\begin{EnvQuadrillage}[NbCarreaux=22x4,Marge=1,Elargir=2/3,Seyes,Cadre]
+	\EcrireLigne[Echelle=1.5]{\textcolor{red}{mon texte rouge, un peu agrandi,sur la ligne 1\ldots}}
+	\EcrireLigne[Echelle=1.15,DecalH=1]{$(1+x)^2=1+2x+x^2$ sur la l2, avec un décal de 1 en plus de la marge\ldots}
+	\EcrireLigne[DecalH=-1]{\textcolor{blue}{mon texte bleu, remis à gauche, sur la ligne 3\ldots}}
+\end{EnvQuadrillage}
+
+\end{PresentationCode}
+\begin{EnvQuadrillage}[NbCarreaux=22x4,Marge=1,Elargir=2/3,Seyes,Cadre]
+	\EcrireLigne[Echelle=1.5]{\textcolor{red}{mon texte rouge, un peu agrandi,sur la ligne 1\ldots}}
+	\EcrireLigne[Echelle=1.15,DecalH=1]{$(1+x)^2=1+2x+x^2$ sur la ligne 2, avec un décalage de 1 carreau en plus de la marge\ldots}
+	\EcrireLigne[DecalH=-1]{\textcolor{blue}{mon texte bleu, remis à gauche, sur la ligne 3\ldots}}
+\end{EnvQuadrillage}
+
+\newpage
+
+\part*{Historique}
+
+\verb|v0.1.0|~:~~~~Version initiale
+
+\end{document}
