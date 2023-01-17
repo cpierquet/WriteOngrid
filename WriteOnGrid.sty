@@ -1,0 +1,116 @@
+% Author                         : C. Pierquet
+% licence                        : Released under the LaTeX Project Public License v1.3c or later, see http://www.latex-project.org/lppl.txtf
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{WriteOnGrid}[2023/01/16 v0.1.0 package to write on grid lines]
+% 0.1.0		Version initiale [fr] & [en]
+
+%------Packages utiles
+\RequirePackage{tikz}
+\RequirePackage{simplekv}
+\RequirePackage{xstring}
+\RequirePackage{xparse}
+%librairies tikz
+\usetikzlibrary{calc,positioning}
+
+%------Variables
+\newcounter{lgquadri}%compteur des lignes, qui sera incrémenté
+
+%------Commandes [fr]
+\newcommand\PasseLigne{\addtocounter{lgquadri}{1}}%passer une ligne
+
+\defKV[LigneQuadrill]{Echelle=\xdef\QuadEchelle{#1}}%déf des clés
+\setKVdefault[LigneQuadrill]{DecalV=0pt,DecalH=0,Sep=0pt,Echelle=1}%valeurs par défaut
+
+\NewDocumentCommand\EcrireLigne{ O{} D<>{left} m }{%écrire sur les lignes l'une après l'autre
+	\addtocounter{lgquadri}{1}
+	\useKVdefault[LigneQuadrill]
+	\setKV[LigneQuadrill]{#1}
+	\node[text width=\fpeval{\ValeurCarreau*\QuadNbCol-\ValeurCarreau*\useKV[Quadrill]{Marge}}cm,align=#2,scale=\QuadEchelle,anchor=base west,inner sep={\useKV[LigneQuadrill]{Sep}}] at ($({\ValeurCarreau*\useKV[Quadrill]{Marge}+\ValeurCarreau*\useKV[LigneQuadrill]{DecalH}},{-\ValeurCarreau*\thelgquadri})+(0,\useKV[LigneQuadrill]{DecalV})$) {\strut #3} ;
+}
+
+\defKV[Quadrill]{NbCarreaux=\xdef\QuadNbCar{#1},Elargir=\xdef\QuadElar{#1}}%déf des clés
+\setKVdefault[Quadrill]{NbCarreaux=17x5,Unite=1,Marge=0,Elargir=0,Cadre=false,Seyes=false}%valeurs par défaut (nbc x nbl)
+
+\NewDocumentEnvironment{EnvQuadrillage}{ O{} D<>{gray} }%créer le quadrillage
+{%
+	\setcounter{lgquadri}{0}%on réinitialise les lignes
+	\useKVdefault[Quadrill]%on met les clés par défaut
+	\setKV[Quadrill]{#1}%on lit les clés
+	\StrCut{\QuadNbCar}{x}{\QuadNbCol}{\QuadNbLig}%
+	\ifboolKV[Quadrill]{Seyes}%seyes ou 5x5
+		{\xdef\ValeurCarreau{0.8}}%
+		{\xdef\ValeurCarreau{0.5}}%
+	\IfSubStr{\QuadElar}{/}%on récupère les élargissements G et D
+		{\StrCut{\QuadElar}{/}{\QuadElarG}{\QuadElarD}}%
+		{\def\QuadElarG{\QuadElar}\def\QuadElarD{\QuadElar}}%
+	%\begin{tikzpicture}[xscale={\useKV[Quadrill]{Unite}},yscale={\useKV[Quadrill]{Unite}},trim left={(0,0)},trim right={({\QuadNbCol},0)}]
+	\begin{tikzpicture}[xscale={\useKV[Quadrill]{Unite}},yscale={\useKV[Quadrill]{Unite}}]
+		\useasboundingbox (0,0) rectangle ({\ValeurCarreau*\QuadNbCol},{-\ValeurCarreau*\QuadNbLig}) ;%on fixe la grille de base, avant élargissement éventuel
+		\ifboolKV[Quadrill]{Seyes}%seyes ou 5x5
+			{%
+				\draw[xstep=0.8,ystep=0.2,thin,#2!50] ({-\ValeurCarreau*\QuadElarG},0) grid ({\ValeurCarreau*\QuadNbCol+\ValeurCarreau*\QuadElarD},{-\ValeurCarreau*\QuadNbLig}) ;%grille seyes
+				\draw[xstep=0.8,ystep=0.8,#2!85] ({-\ValeurCarreau*\QuadElarG},0) grid ({\ValeurCarreau*\QuadNbCol+\ValeurCarreau*\QuadElarD},{-\ValeurCarreau*\QuadNbLig}) ;%grille seyes
+				
+			}%
+			{%
+				\draw[xstep=0.5,ystep=0.5,thin,#2!50] ({-\ValeurCarreau*\QuadElarG},0) grid ({\ValeurCarreau*\QuadNbCol+\ValeurCarreau*\QuadElarD},{-\ValeurCarreau*\QuadNbLig}) ;%grille 5x5
+			}%
+		
+		\ifboolKV[Quadrill]{Cadre}%cadre pour visualiser la "marge" (officielle)
+			{\draw[thick] (0,0) rectangle ({\ValeurCarreau*\QuadNbCol},{-\ValeurCarreau*\QuadNbLig}) ;}%
+			{}%
+	}%
+	{%
+	\end{tikzpicture}%
+}%
+
+%------Commandes [en]
+\newcommand\PassLine{\addtocounter{lgquadri}{1}}%passer une ligne
+
+\defKV[LineQuadril]{Scale=\xdef\QuadEchelle{#1}}%déf des clés
+\setKVdefault[LineQuadril]{OffsetV=0pt,OffsetH=0,Sep=0pt,Scale=1}%valeurs par défaut
+
+\NewDocumentCommand\WriteLine{ O{} D<>{left} m }{%écrire sur les lignes l'une après l'autre
+	\addtocounter{lgquadri}{1}
+	\useKVdefault[LineQuadril]
+	\setKV[LineQuadril]{#1}
+	\node[text width=\fpeval{\ValeurCarreau*\QuadNbCol-\ValeurCarreau*\useKV[Quadril]{Margin}}cm,align=#2,scale=\QuadEchelle,anchor=base west,inner sep={\useKV[LineQuadril]{Sep}}] at ($({\ValeurCarreau*\useKV[Quadril]{Margin}+\ValeurCarreau*\useKV[LineQuadril]{OffsetH}},{-\ValeurCarreau*\thelgquadri})+(0,\useKV[LineQuadril]{OffsetV})$) {\strut #3} ;
+}
+
+\defKV[Quadril]{NumSquares=\xdef\QuadNbCar{#1},Enlarge=\xdef\QuadElar{#1}}%déf des clés
+\setKVdefault[Quadril]{NumSquares=17x5,Unit=1,Margin=0,Enlarge=0,Border=false,Seyes=false}%valeurs par défaut
+
+\NewDocumentEnvironment{EnvGrid}{ O{} D<>{gray} }%créer le quadrillage
+{%
+	\setcounter{lgquadri}{0}%on réinitialise les lignes
+	\useKVdefault[Quadril]%on met les clés par défaut
+	\setKV[Quadril]{#1}%on lit les clés
+	\StrCut{\QuadNbCar}{x}{\QuadNbCol}{\QuadNbLig}%
+	\ifboolKV[Quadril]{Seyes}%seyes ou 5x5
+		{\xdef\ValeurCarreau{0.8}}%
+		{\xdef\ValeurCarreau{0.5}}%
+	\IfSubStr{\QuadElar}{/}%on récupère les élargissements G et D
+		{\StrCut{\QuadElar}{/}{\QuadElarG}{\QuadElarD}}%
+		{\def\QuadElarG{\QuadElar}\def\QuadElarD{\QuadElar}}%
+	%\begin{tikzpicture}[xscale={\useKV[Quadril]{Unit}},yscale={\useKV[Quadril]{Unit}},trim left={(0,0)},trim right={({\QuadNbCol},0)}]
+	\begin{tikzpicture}[xscale={\useKV[Quadrill]{Unite}},yscale={\useKV[Quadrill]{Unite}}]
+		\useasboundingbox (0,0) rectangle ({\ValeurCarreau*\QuadNbCol},{-\ValeurCarreau*\QuadNbLig}) ;%on fixe la grille de base, avant élargissement éventuel
+		\ifboolKV[Quadril]{Seyes}%seyes ou 5x5
+			{%
+				\draw[xstep=0.8,ystep=0.2,thin,#2!75] ({-\ValeurCarreau*\QuadElarG},0) grid ({\ValeurCarreau*\QuadNbCol+\ValeurCarreau*\QuadElarD},{-\ValeurCarreau*\QuadNbLig}) ;%grille seyes
+				\draw[xstep=0.8,ystep=0.8,#2] ({-\ValeurCarreau*\QuadElarG},0) grid ({\ValeurCarreau*\QuadNbCol+\ValeurCarreau*\QuadElarD},{-\ValeurCarreau*\QuadNbLig}) ;%grille seyes
+				
+			}%
+			{%
+				\draw[xstep=0.5,ystep=0.5,thin,#2!75] ({-\ValeurCarreau*\QuadElarG},0) grid ({\ValeurCarreau*\QuadNbCol+\ValeurCarreau*\QuadElarD},{-\ValeurCarreau*\QuadNbLig}) ;%grille 5x5
+			}%
+		
+		\ifboolKV[Quadril]{Border}%cadre pour la "marge"
+			{\draw[thick] (0,0) rectangle ({\ValeurCarreau*\QuadNbCol},{-\ValeurCarreau*\QuadNbLig}) ;}%
+			{}%
+	}%
+	{%
+	\end{tikzpicture}%
+}%
+\endinput
