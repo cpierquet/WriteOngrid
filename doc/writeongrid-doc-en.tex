@@ -3,8 +3,7 @@
 % arara: pdflatex: {shell: yes, synctex: no, interaction: batchmode} if found('log', '(undefined references|Please rerun|Rerun to get)')
 
 \documentclass[a4paper]{article}
-\usepackage[svgnames]{xcolor}
-\usepackage[french]{babel}
+\usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{WriteOnGrid}
@@ -13,6 +12,7 @@
 \usepackage{fontawesome5}
 \usepackage{enumitem}
 \usepackage{frcursive}
+\usepackage{lipsum}
 \usepackage{tabularray}
 \usepackage{fancyvrb}
 \usepackage{fancyhdr}
@@ -45,8 +45,8 @@
 \setlength{\parindent}{0pt}
 \definecolor{LightGray}{gray}{0.9}
 
-\def\TPversion{0.1.0}
-\def\TPdate{16/01/2023}
+\def\TPversion{0.1.1}
+\def\TPdate{20/01/2023}
 
 \usepackage[most]{tcolorbox}
 \tcbuselibrary{minted}
@@ -105,7 +105,7 @@
 
 \vspace{0.5cm}
 
-{$\blacktriangleright$~~Some commands to create a grid (5x5 or Seyes) and to write \og on \fg{} the lines.}
+{$\blacktriangleright$~~Some commands to create a grid (5x5 or Seyes or Ruled) and to write "on" the lines.}
 
 \smallskip
 
@@ -125,7 +125,7 @@
 \end{EnvGrid}
 \end{center}
 
-\begin{EnvGrid}[NumSquares=24x5,Margin=1,Enlarge=2/2,Seyes]
+\begin{EnvGrid}[NumSquares=24x5,Margin=1,Enlarge=2/2,Grid=Seyes]<Plum!75/LightSteelBlue!50>
 	\WriteLine[Scale=1.5]{\textcolor{red}{my text on line 1\ldots}}
 	\WriteLine[Scale=1.5]{\textcolor{blue}{my text on line 2\ldots}}
 	\WriteLine[Scale=1.5,OffsetH=-1]{$1+\frac{1}{2}=\frac32$ et $(1+x)^2=1+2x+x^2$ on line 3\ldots}
@@ -134,7 +134,7 @@
 
 \vspace{0.5cm}
 
-%\hfill{}\textit{Merci à Denis Bitouzé et à Patrick Bideault pour leurs retours et idées !}
+\hfill{}\textit{Thanks to Patrick Bideault for ideas and help !}
 
 \vfill
 
@@ -152,16 +152,16 @@
 
 \newpage
 
-\part*{Introduction}
+\part*{Usage}
 
 \section{The package}
 
 \subsection{Loading of the package, used packages}
 
-The package \textsf{writeongrid} loads within the preamble :
+The package \textsf{WriteOnGrid} loads within the preamble :
 
 \begin{PresentationCode}{listing only}
-\usepackage{writeongrid}
+\usepackage{WriteOnGrid}
 \end{PresentationCode}
 
 It’s mostly compatible with \textsf{latex}, \textsf{pdflatex}, \textsf{lualatex} or \textsf{xelatex} compilation !
@@ -171,6 +171,7 @@ It’s mostly compatible with \textsf{latex}, \textsf{pdflatex}, \textsf{lualate
 It loads the following packages and libraries :
 
 \begin{itemize}
+	\item \texttt{xcolor} with options \Cle{table,svgnames} ;
 	\item \texttt{tikz} with the librairies \Cle{calc} and \Cle{positionning} ;
 	\item \texttt{xstring}, \texttt{xparse} and \texttt{simplekv}.
 \end{itemize}
@@ -242,48 +243,53 @@ Le left-border of the \textcolor{ForestGreen}{\textit{border}} is aligned on the
 The first argument, \textit{optional}, between \texttt{[...]} give the \Cle{keys} :
 
 \begin{itemize}
-	\item \Cle{NumSwuares} to specify the size of the grid, under \texttt{(nbCol)x(nbRow)} ; \hfill~default : \Cle{17x5}
+	\item \Cle{NumSquares} to specify the size of the grid, under \texttt{(nbCol)x(nbRow)} ; \hfill~default : \Cle{17x5}
 	\item \Cle{Unit} to specify the scale of the grid ; \hfill~default : \Cle{1}
 	\item \Cle{Margin} to specify the global \textcolor{orange}{margin} at the beginning of the lines ; \hfill~default : \Cle{0}
 	\item \Cle{Enlarge} to specify the squares-overtakings, globally with \texttt{\textcolor{red}{L}\textcolor{blue}{R}} or side by side with \texttt{\textcolor{red}{L}/\textcolor{blue}{R}} ;\hfill~default : \Cle{0}
 	\item the boolean \Cle{Border} to display the basis border of the grid ;\hfill~default : \Cle{false}
-	\item the boolean \Cle{Seyes} to work with a Seyes grid.\hfill~default : \Cle{false}
+	\item the key\Cle{Grille}, from \Cle{5x5/Seyes/Ruled}, to specify the grid's type.\hfill~défaut : \Cle{5x5}
 \end{itemize}
 
-The second argument, \textit{optional}, between \texttt{<...>} is the major color of the grid, \Cle{lightgray} by default.
+The second argument, \textit{optional}, between \texttt{<...>} is the color(s) of the grid :
+
+\begin{itemize}
+	\item by \Cle{Color} (\Cle{lightgray!50} by default) for $5\times5$ or Ruled ;
+	\item by \Cle{ColorA/ColorB} (\Cle{lightgray!50/lightgray!25} by default) for Seyes.
+\end{itemize}
 
 \medskip
 
 \begin{PresentationCode}{listing only}
-%the borders are added to show the basis grid
-
-%30x5 small squares, w/o overtakings, basis color
-\begin{EnvGrid}[NumSquares=30x5]
+%18x4 big squares, w/o overtaking, 3-margin
+\begin{EnvGrid}[NumSquares=18x4,Grid=Seyes,Margin=3]<Plum!75/LightSteelBlue!50>
 \end{EnvGrid}
 
 %36x8 small squares, overtakings 3/3, LightSteelBlue color
 \begin{EnvGrid}[NumSquares=36x8,Enlarge=3/3]<LightSteelBlue>
 \end{EnvGrid}
 
-%15x5 big squares, overtakings 1/2, orange, centered
+%12x3 lines "Ruled", w/o overtakins, orange!50 color, centered, with 2-margin
 \begin{center}
-	\begin{EnvGrid}[NumSquares=15x5,Enlarge=1/2,Seyes]<orange>
+	\begin{EnvGrid}[NumSquares=12x3,Grid=Ruled,Margin=2]<orange!50>
 	\end{EnvGrid}
 \end{center}
 \end{PresentationCode}
 
 \medskip
 
-\begin{EnvGrid}[NumSquares=30x5,Border]
+\begin{EnvGrid}[NumSquares=18x4,Grid=Seyes,Margin=3]<Plum!75/LightSteelBlue!50>
 \end{EnvGrid}
 
 \smallskip
 
-\begin{EnvGrid}[NumSquares=36x8,Enlarge=3/3,Border]<LightSteelBlue>
+\begin{EnvGrid}[NumSquares=36x8,Enlarge=3/3]<LightSteelBlue>
 \end{EnvGrid}
 
+\smallskip
+
 \begin{center}
-	\begin{EnvGrid}[NumSquares=15x5,Enlarge=1/2,Seyes,Border]<orange>
+	\begin{EnvGrid}[NumSquares=12x3,Grid=Ruled,Margin=2]<orange!50>
 	\end{EnvGrid}
 \end{center}
 
@@ -324,35 +330,35 @@ Le third argument, \textit{mandatory} and between \texttt{\{...\}} is the text, 
 
 \begin{PresentationCode}{listing only}
 \begin{EnvGrid}[NumSquares=36x8]
-	\WriteLine{my text on ligne 1\ldots}
-	\WriteLine<center>{\ttfamily my tetetype text centered on line 2\ldots}
-	\WriteLine<right>{right-align text on line 3\ldots}
-	\WriteLine[OffsetH=0.1]{\textcolor{red}{red text, 1mm-shifted\ldots}}
+	\WriteLine[Scale=1.5]{my text on ligne 1\ldots}
+	\WriteLine[Scale=1.5]<center>{\ttfamily my tetetype text centered on line 2\ldots}
+	\WriteLine[Scale=1.5]<right>{right-align text on line 3\ldots}
+	\WriteLine[Scale=1.5,OffsetH=0.1]{\textcolor{red}{red text, 1mm-shifted\ldots}}
 	\PassLine
 	\WriteLine[Scale=0.5]{\sffamily sans serif text, reduced by 50\,\%, on line 6\ldots}
-	\WriteLine[OffsetH=3]{\cursive 3 squares-shited text\ldots}
+	\WriteLine[Scale=1.5,OffsetH=3]{\cursive 3 squares-shifted text\ldots}
 \end{EnvGrid}
 \end{PresentationCode}
 
 \begin{EnvGrid}[NumSquares=36x8]
-	\WriteLine{my text on ligne 1\ldots}
-	\WriteLine<center>{\ttfamily my tetetype text centered on line 2\ldots}
-	\WriteLine<right>{right-align text on line 3\ldots}
-	\WriteLine[OffsetH=0.1]{\textcolor{red}{red text, 1mm-shifted\ldots}}
+	\WriteLine[Scale=1.5]{my text on ligne 1\ldots}
+	\WriteLine[Scale=1.5]<center>{\ttfamily my tetetype text centered on line 2\ldots}
+	\WriteLine[Scale=1.5]<right>{right-align text on line 3\ldots}
+	\WriteLine[Scale=1.5,OffsetH=0.1]{\textcolor{red}{red text, 1mm-shifted\ldots}}
 	\PassLine
 	\WriteLine[Scale=0.5]{\sffamily sans serif text, reduced by 50\,\%, on line 6\ldots}
-	\WriteLine[OffsetH=3]{\cursive 3 squares-shited text\ldots}
+	\WriteLine[Scale=1.5,OffsetH=3]{\cursive 3 squares-shifted text\ldots}
 \end{EnvGrid}
 
 \begin{PresentationCode}{listing only}
-\begin{EnvGrid}[NumSquares=22x4,Margin=1,Enlarge=2/3,Seyes,Border]
+\begin{EnvGrid}[NumSquares=16x4,Margin=2,Grid=Ruled]
 	\WriteLine[Scale=1.5]{\textcolor{red}{red text on line 1\ldots}}
 	\WriteLine[Scale=1.15,OffsetH=1]{$(1+x)^2=1+2x+x^2$ on line 2, with 1-square offset\ldots}
 	\WriteLine[OffsetH=-1]{\textcolor{blue}{blue text, back to left, on line 3\ldots}}
 \end{EnvGrid}
 
 \end{PresentationCode}
-\begin{EnvGrid}[NumSquares=22x4,Margin=1,Enlarge=2/3,Seyes,Border]
+\begin{EnvGrid}[NumSquares=16x4,Margin=2,Grid=Ruled]
 	\WriteLine[Scale=1.5]{\textcolor{red}{red text on line 1\ldots}}
 	\WriteLine[Scale=1.15,OffsetH=1]{$(1+x)^2=1+2x+x^2$ on line 2, with 1-square offset\ldots}
 	\WriteLine[OffsetH=-1]{\textcolor{blue}{blue text, back to left, on line 3\ldots}}
@@ -360,7 +366,58 @@ Le third argument, \textit{mandatory} and between \texttt{\{...\}} is the text, 
 
 \newpage
 
+\part*{Additional informations}
+
+\section{Introduction}
+
+There's few other possibilities with the package\textsf{WorkOnGrid}, but for the moment only with \textit{french} keys, so there's no specific documentation for these commands.
+
+\smallskip
+
+To sum up, they create full paper grid, with the ability to write paragraph.
+
+\section{Example}
+
+\begin{PresentationCode}{listing only}
+\begin{PleinePageRuled}[NumLignes]
+	\LignePapierRuled[Echelle=1.25,Ligne=1]{C. PIERQUET \hfill LaTeX}
+	\LignePapierRuled[Echelle=1.25,Ligne=2,Couleur=red]<center>{\underline{\cursive\bfseries Evaluation 3}}
+	\CadreNoteRuled{3}
+	\LignePapierRuled[Echelle=1.25,Ligne=8,Couleur=ForestGreen]{\sffamily\underline{Exercise 1 :}}
+	\ParagraphePapierRuled[Ligne=9]{\cursive\lipsum[1]}
+	\ParagraphePapierRuled[Ligne=22]
+	{%
+		We try with math, $1+\frac12=\frac32$, inline, with several lines.\\
+		And another math example, $\int_0^1 2x dx = 1$.\\
+		A new line now !
+	}
+\end{PleinePageRuled}
+\end{PresentationCode}
+
+\pagebreak
+
+\thispagestyle{empty}
+
+\begin{PleinePageRuled}
+	\LignePapierRuled[Echelle=1.25,Ligne=1]{C. PIERQUET \hfill LaTeX}
+	\LignePapierRuled[Echelle=1.25,Ligne=2,Couleur=red]<center>{\underline{\cursive\bfseries Evaluation 3}}
+	\CadreNoteRuled{3}
+	\LignePapierRuled[Echelle=1.25,Ligne=8,Couleur=ForestGreen]{\sffamily\underline{Exercise 1 :}}
+	\ParagraphePapierRuled[Ligne=9]{\cursive\lipsum[1]}
+	\ParagraphePapierRuled[Ligne=22]
+	{%
+		We try with math, $1+\frac12=\frac32$, inline, with several lines.\\
+		And another math example, $\int_0^1 2x dx = 1$.\\
+		A new line now !
+	}
+\end{PleinePageRuled}
+
+\pagebreak
+
+
 \part*{History}
+
+\verb|v0.1.1|~:~~~~Best color choice
 
 \verb|v0.1.0|~:~~~~Initial version
 

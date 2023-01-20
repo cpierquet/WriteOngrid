@@ -3,7 +3,6 @@
 % arara: pdflatex: {shell: yes, synctex: no, interaction: batchmode} if found('log', '(undefined references|Please rerun|Rerun to get)')
 
 \documentclass[a4paper]{article}
-\usepackage[svgnames]{xcolor}
 \usepackage[french]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -13,9 +12,11 @@
 \usepackage{fontawesome5}
 \usepackage{enumitem}
 \usepackage{frcursive}
+\usepackage{lipsum}
 \usepackage{tabularray}
 \usepackage{fancyvrb}
 \usepackage{fancyhdr}
+\usepackage{frcursive}
 \fancyhf{}
 \renewcommand{\headrulewidth}{0pt}
 \lfoot{\sffamily\small [WriteOnGrid]}
@@ -47,8 +48,8 @@
 \setlength{\parindent}{0pt}
 \definecolor{LightGray}{gray}{0.9}
 
-\def\TPversion{0.1.0}
-\def\TPdate{16 Janvier 2023}
+\def\TPversion{0.1.1}
+\def\TPdate{20 Janvier 2023}
 
 \usepackage[most]{tcolorbox}
 \tcbuselibrary{minted}
@@ -107,11 +108,15 @@
 
 \vspace{0.5cm}
 
-{$\blacktriangleright$~~Quelques commandes créer une grille (5x5 ou Seyes) et écrire \og sur \fg{} les lignes.}
+{$\blacktriangleright$~~Quelques commandes créer une grille (5x5 ou Seyes ou Ruled) et écrire \og sur \fg{} les lignes.}
 
 \smallskip
 
 {$\blacktriangleright$~~Personnalisation de la taille de la grille, des marges, etc.}
+
+\smallskip
+
+{$\blacktriangleright$~~Possibilité de créer une page complète Seyes}
 
 \vspace{1cm}
 
@@ -127,7 +132,7 @@
 \end{EnvQuadrillage}
 \end{center}
 
-\begin{EnvQuadrillage}[NbCarreaux=24x5,Marge=1,Elargir=2/2,Seyes]
+\begin{EnvQuadrillage}[NbCarreaux=24x5,Marge=1,Elargir=2/2,Grille=Seyes]<Plum!75/LightSteelBlue!50>
 	\EcrireLigne[Echelle=1.5]{\textcolor{red}{mon texte sur la ligne 1\ldots}}
 	\EcrireLigne[Echelle=1.5]{\textcolor{blue}{mon texte sur la ligne 2\ldots}}
 	\EcrireLigne[Echelle=1.5,DecalH=-1]{$1+\frac{1}{2}=\frac32$ et $(1+x)^2=1+2x+x^2$ sur la ligne 3\ldots}
@@ -136,7 +141,7 @@
 
 \vspace{0.5cm}
 
-%\hfill{}\textit{Merci à Denis Bitouzé et à Patrick Bideault pour leurs retours et idées !}
+\hfill{}\textit{Merci à Patrick Bideault pour ses retours et idées !}
 
 \vfill
 
@@ -154,16 +159,21 @@
 
 \newpage
 
-\part*{Introduction}
+\phantomsection
+\hypertarget{matoc}{}
 
-\section{Le package writeongrid}
+\tableofcontents
+
+\newpage
+
+\section{Le package WriteOnGrid}
 
 \subsection{Chargement du package, packages utilisés}
 
-Le package \textsf{writeongrid} se charge dans le préambule via la commande :
+Le package \textsf{WriteOnGrid} se charge dans le préambule via la commande :
 
 \begin{PresentationCode}{listing only}
-\usepackage{writeongrid}
+\usepackage{WriteOnGrid}
 \end{PresentationCode}
 
 Il est compatible avec les compilations usuelles en \textsf{latex}, \textsf{pdflatex}, \textsf{lualatex} ou \textsf{xelatex}.
@@ -173,6 +183,7 @@ Il est compatible avec les compilations usuelles en \textsf{latex}, \textsf{pdfl
 Il charge les packages et librairies suivantes :
 
 \begin{itemize}
+	\item \texttt{xcolor} avec les options \Cle{table,svgnames} ;
 	\item \texttt{tikz} avec les librairies \Cle{calc} et \Cle{positionning} ;
 	\item \texttt{xstring}, \texttt{xparse} et  \texttt{simplekv}.
 \end{itemize}
@@ -185,7 +196,7 @@ L'idée est de proposer, grâce à \TikZ, des \textsf{commandes} et \textsf{envi
 %environnement francisé, avec clés en français pour préparer la grille
 %commandes pour placer ou passer une ligne
 
-\begin{EnvQuadrillage}[clés]<couleur>
+\begin{EnvQuadrillage}[clés]<couleur(s)>
 	\EcrireLigne[clés]<alignement>{texte}
 	\PasseLigne
 \end{EnvQuadrillage}
@@ -210,7 +221,7 @@ Ci-dessous on représente une grille $5\times5$ :
 
 \begin{tikzpicture}
 	\useasboundingbox (0,0) rectangle ({0.5*24},{-0.5*5}) ;
-	\draw[xstep=0.5,ystep=0.5,thin,lightgray!75] ({-0.5*2},0) grid ({0.5*24+0.5*3},{-0.5*5}) ;
+	\draw[xstep=0.5,ystep=0.5,thin,lightgray!50] ({-0.5*2},0) grid ({0.5*24+0.5*3},{-0.5*5}) ;
 	\draw[thick,decorate,decoration={brace,amplitude=8pt,mirror}](0,{-0.5*5-0.25})--({0.5*24},{-0.5*5-0.25}) node[midway,below=8pt,font=\small\sffamily] {24C} ;
 	\draw[red,thick,decorate,decoration={brace,amplitude=8pt,mirror}] ({-2*0.5},{-0.5*5-0.25})--({0},{-0.5*5-0.25}) node[midway,below=8pt,font=\small\sffamily] {2C} ;
 	\draw[blue,thick,decorate,decoration={brace,amplitude=8pt,mirror}] ({0.5*24},{-0.5*5-0.25})--({0.5*24+3*0.5},{-0.5*5-0.25}) node[midway,below=8pt,font=\small\sffamily] {3C} ;
@@ -229,14 +240,14 @@ De plus, le bord gauche du \textcolor{ForestGreen}{\textit{cadre}} est aligné s
 
 \pagebreak
 
-\section{Commandes, clés et options}
+\section{Grilles individuelles}
 
 \subsection{L'environnement}
 
 \begin{PresentationCode}{listing only}
 %environnement francisé, avec clés en français pour préparer la grille
 
-\begin{EnvQuadrillage}[clés]<couleur>
+\begin{EnvQuadrillage}[clés]<couleur(s)>
 	...
 \end{EnvQuadrillage}
 \end{PresentationCode}
@@ -249,43 +260,49 @@ Le premier argument, \textit{optionnel}, entre \texttt{[...]} propose les \Cle{c
 	\item \Cle{Marge} pour spécifier la \textcolor{orange}{marge} du début des lignes ; \hfill~défaut : \Cle{0}
 	\item \Cle{Elargir} pour préciser les carreaux de débordements, sous la forme unique \texttt{\textcolor{red}{G}\textcolor{blue}{D}} ou par côté \texttt{\textcolor{red}{G}/\textcolor{blue}{D}} ;\hfill~défaut : \Cle{0}
 	\item le booléen \Cle{Cadre} pour afficher le cadre de base du quadrillage ;\hfill~défaut : \Cle{false}
-	\item le booléen \Cle{Seyes} pour afficher un quadrillage de type Seyes.\hfill~défaut : \Cle{false}
+	\item la clé \Cle{Grille}, parmi \Cle{5x5 / Seyes / Ruled}, pour spécifier le type de quadrillage ;\hfill~défaut : \Cle{5x5}
+	\item la clé \Cle{CouleurBarreSeyes} pour rajouter un trait vertical pour le papier Seyes .\hfill~défaut : \Cle{red!75}
 \end{itemize}
 
-Le second argument, \textit{optionnel}, entre \texttt{<...>} est quant à lui la couleur de base du quadrillage, \Cle{lightgray} par défaut.
+Le second argument, \textit{optionnel}, entre \texttt{<...>} correspond quant à lui à la couleur de base du quadrillage :
+
+\begin{itemize}
+	\item sous la forme \Cle{Couleur} (\Cle{lightgray!50} par défaut) pour le quadrillage $5\times5$ ou Ruled ;
+	\item sous la forme \Cle{CouleurP/CouleurS} (\Cle{lightgray!50/lightgray!25} par défaut) pour le Seyes.
+\end{itemize}
 
 \medskip
 
 \begin{PresentationCode}{listing only}
-%les cadres ont été rajoutés pour la sortie
+%des cadres ont été rajoutés pour la sortie
 
-%30x5 petits carreaux, sans dépassement, couleur de base
-\begin{EnvQuadrillage}[NbCarreaux=30x5]
+%18x4 grands carreaux, sans dépassement, couleurs adaptées, marge de 3 carreaux
+\begin{EnvQuadrillage}[NbCarreaux=18x4,Grille=Seyes,Marge=3]<Plum!75/LightSteelBlue!50>
 \end{EnvQuadrillage}
 
-%36x8 petits carreaux, avec débordements 3/3, couleur LightSteelBlue
-\begin{EnvQuadrillage}[NbCarreaux=36x8,Elargir=3/3]<LightSteelBlue>
+%36x8 petits carreaux, avec débordements 3/3, couleur LightSteelBlue!50
+\begin{EnvQuadrillage}[NbCarreaux=36x8,Elargir=3/3]<LightSteelBlue!50>
 \end{EnvQuadrillage}
 
-%15x5 grand carreaux, avec débordements 1/2, couleur orange, centré
+%12x3 lignes "Ruled", sans débordements, couleur orange!50, centré, avec marge
 \begin{center}
-	\begin{EnvQuadrillage}[NbCarreaux=15x5,Elargir=1/2,Seyes]<orange>
+	\begin{EnvQuadrillage}[NbCarreaux=12x3,Elargir=2/2,Grille=Ruled,Marge=2]<orange!50>
 	\end{EnvQuadrillage}
 \end{center}
 \end{PresentationCode}
 
 \medskip
 
-\begin{EnvQuadrillage}[NbCarreaux=30x5,Cadre]
+\begin{EnvQuadrillage}[NbCarreaux=18x4,Grille=Seyes,Marge=3]<Plum!75/LightSteelBlue!50>
 \end{EnvQuadrillage}
 
 \smallskip
 
-\begin{EnvQuadrillage}[NbCarreaux=36x8,Elargir=3/3,Cadre]<LightSteelBlue>
+\begin{EnvQuadrillage}[NbCarreaux=36x8,Elargir=3/3,Cadre]<LightSteelBlue!50>
 \end{EnvQuadrillage}
 
 \begin{center}
-	\begin{EnvQuadrillage}[NbCarreaux=15x5,Elargir=1/2,Seyes,Cadre]<orange>
+	\begin{EnvQuadrillage}[NbCarreaux=12x3,Grille=Ruled,Marge=2]<orange!50>
 \end{EnvQuadrillage}
 \end{center}
 
@@ -327,7 +344,7 @@ Le troisième argument, \textit{mandataire} et entre \texttt{\{...\}} est quant 
 \begin{PresentationCode}{listing only}
 \begin{EnvQuadrillage}[NbCarreaux=36x8]
 	\EcrireLigne{mon texte sur la ligne 1\ldots}
-	\EcrireLigne<center>{\ttfamily mon texte, en fonte teletype augmentée de 25\,\%, centré sur la ligne 2\ldots}
+	\EcrireLigne[Echelle=1.25]<center>{\ttfamily mon texte, en fonte teletype +25\,\%, centré sur la ligne 2\ldots}
 	\EcrireLigne<right>{mon texte aligné à droite sur la ligne 3\ldots}
 	\EcrireLigne[DecalV=0.1]{\textcolor{red}{mon texte rouge sur la ligne 4, décalé de 1mm vers le haut\ldots}}
 	\PasseLigne
@@ -338,7 +355,7 @@ Le troisième argument, \textit{mandataire} et entre \texttt{\{...\}} est quant 
 
 \begin{EnvQuadrillage}[NbCarreaux=36x8]
 	\EcrireLigne{mon texte sur la ligne 1\ldots}
-	\EcrireLigne<center>{\ttfamily mon texte, en fonte teletype augmentée de 25\,\%, centré sur la ligne 2\ldots}
+	\EcrireLigne[Echelle=1.25]<center>{\ttfamily mon texte, en fonte teletype augmentée de 25\,\%, centré sur la ligne 2\ldots}
 	\EcrireLigne<right>{mon texte aligné à droite sur la ligne 3\ldots}
 	\EcrireLigne[DecalV=0.1]{\textcolor{red}{mon texte rouge sur la ligne 4, décalé de 1mm vers le haut\ldots}}
 	\PasseLigne
@@ -347,22 +364,323 @@ Le troisième argument, \textit{mandataire} et entre \texttt{\{...\}} est quant 
 \end{EnvQuadrillage}
 
 \begin{PresentationCode}{listing only}
-\begin{EnvQuadrillage}[NbCarreaux=22x4,Marge=1,Elargir=2/3,Seyes,Cadre]
-	\EcrireLigne[Echelle=1.5]{\textcolor{red}{mon texte rouge, un peu agrandi,sur la ligne 1\ldots}}
-	\EcrireLigne[Echelle=1.15,DecalH=1]{$(1+x)^2=1+2x+x^2$ sur la l2, avec un décal de 1 en plus de la marge\ldots}
-	\EcrireLigne[DecalH=-1]{\textcolor{blue}{mon texte bleu, remis à gauche, sur la ligne 3\ldots}}
+\begin{EnvQuadrillage}[NbCarreaux=22x4,Marge=2,Elargir=2/3,Grille=Seyes]
+	\EcrireLigne[Echelle=1.5]{\textcolor{red}{mon texte rouge, un peu agrandi, sur la ligne 1\ldots}}
+	\EcrireLigne[Echelle=1.15,DecalH=1]{$(1+x)^2=1+2x+x^2$ sur la l2, avec un décal de 1 en plus\ldots}
+	\EcrireLigne[DecalH=-1.75]{\textcolor{blue}{mon texte bleu, remis un peu à gauche, sur la ligne 3\ldots}}
 \end{EnvQuadrillage}
 
 \end{PresentationCode}
-\begin{EnvQuadrillage}[NbCarreaux=22x4,Marge=1,Elargir=2/3,Seyes,Cadre]
-	\EcrireLigne[Echelle=1.5]{\textcolor{red}{mon texte rouge, un peu agrandi,sur la ligne 1\ldots}}
-	\EcrireLigne[Echelle=1.15,DecalH=1]{$(1+x)^2=1+2x+x^2$ sur la ligne 2, avec un décalage de 1 carreau en plus de la marge\ldots}
-	\EcrireLigne[DecalH=-1]{\textcolor{blue}{mon texte bleu, remis à gauche, sur la ligne 3\ldots}}
+\begin{EnvQuadrillage}[NbCarreaux=22x4,Marge=2,Elargir=2/3,Grille=Seyes]
+	\EcrireLigne[Echelle=1.5]{\textcolor{red}{mon texte rouge, un peu agrandi, sur la ligne 1\ldots}}
+	\EcrireLigne[Echelle=1.15,DecalH=1]{$(1+x)^2=1+2x+x^2$ sur la ligne 2, avec un décalage de 1 carreau en plus\ldots}
+	\EcrireLigne[DecalH=-1.75]{\textcolor{blue}{mon texte bleu, remis un peu à gauche, sur la ligne 3\ldots}}
 \end{EnvQuadrillage}
+
+\pagebreak
+
+\section{Page complète type Seyes}
+
+\subsection{Idée et fonctionnement global}
+
+Il s'agit ici de créer le quadrillage Seyes sur la page complète, comme pour la copie d'un élève !
+
+Dans ce cas, le type de papier utilisé \textbf{doit} être \texttt{a4}, et les unités sont fixées à 1~cm !
+
+\smallskip
+
+\faBomb{} Le fonctionnement est différent des environnements \textit{ponctuels} précédents, et l'écriture sur les lignes du quadrillage peuvent poser souci avec des environnements mathématiques !!
+
+\medskip
+
+La grille complète est liée à un environnement (basé sur \texttt{tikzpicture}), et les commandes pour écrire sont à mettre dans l'environnement.
+
+\smallskip
+
+Tout le placement est géré grâce à un point (fictif), nommé \texttt{(SeyesOrigine)}, qui correspond au point de départ de l'écriture sur la copie !
+
+\begin{PresentationCode}{listing only}
+\begin{PleinePageSeyes}[options]
+	\LignePapierSeyes[options]<alignement>(ajustement){texte}
+	\CadreNoteSeyes[hauteur]{numligne}
+	\ParagraphePapierSeyes[options]<alignement>(ajustement){texte}
+\end{PleinePageSeyes}
+\end{PresentationCode}
+
+\subsection{La grille}
+
+Pour l'environnement de création de la grille, l'argument, \textit{optionnel} et entre \texttt{[...]}, propose :
+
+\begin{itemize}
+	\item la clé \Cle{CouleurP} pour la couleur des \textit{gros traits} ;\hfill~défaut : \Cle{Plum!66}
+	\item la clé \Cle{CouleurS} pour la couleur des \textit{petits traits} ;\hfill~défaut : \Cle{LightSteelBlue!33}
+	\item la clé \Cle{CouleurMarge} pour la couleur du trait de la marge ;\hfill~défaut : \Cle{red!75}
+	\item le booléen \Cle{NumLignes} pour afficher le numéro des lignes (pour aider !). \hfill~défaut : \Cle{false}
+\end{itemize}
+
+\subsection{La commande pour saisir une ligne}
+
+La commande \texttt{LignePapierSeyes} permet de saisir une ligne \textbf{unique}, un peu comme la commande pour les petits blocs de quadrillage. Plusieurs options et arguments sont disponibles.
+
+\begin{PresentationCode}{listing only}
+\LignePapierSeyes[options]<alignement>(ajustement){texte}
+\end{PresentationCode}
+
+La commande positionne le \textsf{texte}, au niveau de la marge verticale, sur la ligne précisée !
+
+\smallskip
+
+Le premier argument, \textit{optionnel} et entre \texttt{[...]} propose :
+
+\begin{itemize}
+	\item la clé \Cle{Couleur} pour spécifier une couleur globale pour le texte ;\hfill~défaut : \Cle{black}
+	\item la clé \Cle{Echelle} pour spécifier une échelle globale pour le texte ;\hfill~défaut : \Cle{1}
+	\item la clé \Cle{Ligne} pour spécifier le numéro de ligne sur lequel on souhaite écrire ;\hfill~défaut : \Cle{1}
+	\item la clé \Cle{Largeur} pour spécifier la largeur (en cm) de la boîte dans laquelle le texte sera placé.\hfill~défaut : \Cle{16.8}
+\end{itemize}
+
+Le deuxième argument, \textit{optionnel} et entre \texttt{<...>}, permet de spécifier l'alignement souhaité pour la ligne, parmi \Cle{left/center/right}, et vaut \Cle{left} par défaut.
+
+\smallskip
+
+Le troisième argument, \textit{optionnel} et entre \texttt{(...)}, permet de positionner le texte avec un \textit{décalage fin} et \textit{relatif} de $(x\,;y)$, et il est fixé par défaut à \Cle{0,0}.
+
+\smallskip
+
+Le dernier argument, \textit{mandataire} et entre \texttt{\{...\}} est le texte à placer, avec les options classiques en langage \TeX{} !
+
+\subsection{Une commande pour un cadre de note}
+
+\begin{PresentationCode}{listing only}
+\CadreNoteSeyes[hauteur]{numligne}
+\end{PresentationCode}
+
+Cette commande permet de tracer un cadre \textsf{note/appréciation} de \Cle{hauteur} en carreaux, et placé sur la ligne \Cle{numligne}.
+
+\pagebreak
+
+\subsection{Une commande pour saisir un paragraphe (non fonctionnelle à 100\,\%)}
+
+La commande \texttt{ParagraphePapierSeyes} permet de saisir des commandes \textit{multilignes}, grâce à l'utilisation de \texttt{\textbackslash\textbackslash}.
+
+\begin{PresentationCode}{listing only}
+\ParagraphePapierSeyes[options]<alignement>(ajustement){texte}
+\end{PresentationCode}
+
+\faBomb{} Cet aspect \textit{multilignes} pourra sans doute être problématique pour un placement optimal, donc doit être utilisée avec précautions\ldots
+
+\smallskip
+
+Le premier argument, \textit{optionnel} et entre \texttt{[...]} propose :
+
+\begin{itemize}
+	\item la clé \Cle{Couleur} pour spécifier une couleur globale pour le texte ;\hfill~défaut : \Cle{black}
+	\item la clé \Cle{TaillePolice} pour spécifier la taille, en points, du texte ;\hfill~défaut : \Cle{1}
+	\item la clé \Cle{Espacement}, en points, pour que l'interligne soit OK ;\hfill~défaut : \Cle{22.792}
+	\item la clé \Cle{Largeur} pour la largeur (en cm) de la boîte dans laquelle le paragraphe sera placé.\hfill~défaut : \Cle{16.8}
+\end{itemize}
+
+Le deuxième argument, \textit{optionnel} et entre \texttt{<...>}, permet de spécifier l'alignement souhaité pour la ligne, parmi \Cle{left/center/right/justify}, et vaut \Cle{justify} par défaut.
+
+\smallskip
+
+Le troisième argument, \textit{optionnel} et entre \texttt{(...)}, permet de positionner le paragraphe avec un \textit{décalage fin} et \textit{relatif} de $(x\,;y)$, et il est fixé par défaut à \Cle{0,0}.
+
+\smallskip
+
+Le dernier argument, \textit{mandataire} et entre \texttt{\{...\}} est le paragraphe à placer, avec les options classiques en langage \TeX{}, et le passage à la ligne effectué par \texttt{\textbackslash\textbackslash} !
+
+\subsection{Exemple \og détaillé \fg}
+
+Un exemple \textit{détaillé}, avec le rendu en page suivante, avec quelques commentaires pour expliquer.
+
+\begin{PresentationCode}{listing only}
+\pagestyle{empty}
+
+\begin{PleinePageSeyes}[NumLignes]%numéro de lignes pour mieux "lire"
+	%entête
+	\LignePapierSeyes[Echelle=1.25,Ligne=1]{C. PIERQUET \hfill LaTeX}
+	%titre
+	\LignePapierSeyes[Echelle=1.5,Ligne=2,Couleur=red]<center>{\underline{\cursive\bfseries Devoir 1}}
+	%cadre de notes
+	\CadreNoteSeyes{3}
+	%ligne pour un petit titre
+	\LignePapierSeyes[Echelle=1.5,Ligne=9,Couleur=ForestGreen]{\sffamily\underline{Exercice 1 :}}
+	%un paragraphe de quelques lignes
+	\ParagraphePapierSeyes[Ligne=10]{\cursive\lipsum[1]}
+	%un paragraphe avec des maths
+	\ParagraphePapierSeyes[Ligne=22]
+	{%
+		On essaye avec des maths $1+\frac12=\frac32$ en mode ligne avec des lignes assez longues pour voir
+		ce que ça peut donner\ldots Et une intégrale $\int_0^1 2x dx = 1$.\\On essaye en passant à la ligne !!!
+	}
+	%une ligne avec des maths
+	\LignePapierSeyes[Ligne=25]<center>{${\displaystyle\sum_{i=1}^{n} i=\displaystyle\frac{n(n+1)}{2}}$.}
+	
+	%un environnement, avec ajustement manuel via (x,y)...
+	%pas fonctionnel à 100%
+	\LignePapierSeyes[Echelle=1.1,Ligne=27](-1.4,0.95)
+	{
+		\begin{align*}
+			\frac{d}{dx} \ln x &= \lim_{h\to 0} \frac{\ln(x+h) - \ln x}{h} \\
+			&= \ln e^{1/x} &&\text{How this follows is left as an exercise.}\\
+			&= \frac{1}{x} &&\text{Using the definition of ln as inverse function}
+		\end{align*}
+	}
+	%un paragraphe multiligne, avec police agrandie
+	\ParagraphePapierSeyes[TaillePolice=14,Ligne=30]
+		{BlablablaBlablabla.\\BlablablaBlablablaBlablablaBlablabla.}
+\end{PleinePageSeyes}
+\end{PresentationCode}
 
 \newpage
 
-\part*{Historique}
+\pagestyle{empty}
+
+\begin{PleinePageSeyes}[NumLignes]%numéro de lignes pour mieux "lire"
+	%entête
+	\LignePapierSeyes[Echelle=1.25,Ligne=1]{C. PIERQUET \hfill LaTeX}
+	%titre
+	\LignePapierSeyes[Echelle=1.5,Ligne=2,Couleur=red]<center>{\underline{\cursive\bfseries Devoir 1}}
+	%cadre de notes
+	\CadreNoteSeyes{3}
+	%ligne pour un petit titre
+	\LignePapierSeyes[Echelle=1.5,Ligne=9,Couleur=ForestGreen]{\sffamily\underline{Exercice 1 :}}
+	%un paragraphe de quelques lignes
+	\ParagraphePapierSeyes[Ligne=10]{\cursive\lipsum[1]}
+	%un paragraphe avec des maths
+	\ParagraphePapierSeyes[Ligne=22]
+	{%
+		On essaye avec des maths $1+\frac12=\frac32$ en mode ligne avec des lignes assez longues pour voir
+		ce que ça peut donner\ldots Et une intégrale $\int_0^1 2x dx = 1$.\\On essaye en passant à la ligne !!!
+	}
+	%une ligne avec des maths
+	\LignePapierSeyes[Ligne=25]<center>{${\displaystyle\sum_{i=1}^{n} i=\displaystyle\frac{n(n+1)}{2}}$.}
+	
+	%un environnement, avec ajustement manuel via (x,y)...
+	%pas fonctionnel à 100%
+	\LignePapierSeyes[Echelle=1.1,Ligne=27](-1.4,0.95)
+	{
+		\begin{align*}
+			\frac{d}{dx} \ln x &= \lim_{h\to 0} \frac{\ln(x+h) - \ln x}{h} \\
+			&= \ln e^{1/x} &&\text{How this follows is left as an exercise.}\\
+			&= \frac{1}{x} &&\text{Using the definition of ln as inverse function}
+		\end{align*}
+	}
+	%un paragraphe multiligne, avec police aggrandie
+	\ParagraphePapierSeyes[TaillePolice=14,Ligne=30]
+	{BlablablaBlablabla.\\BlablablaBlablablaBlablablaBlablabla.}
+\end{PleinePageSeyes}
+
+\pagebreak
+
+\section{Pages type 5x5 et College Ruled}
+
+\subsection{Fonctionnement global}
+
+Les commandes, méthodes et remarques de la section précédente sur les grilles Seyes peuvent être adaptées pour les grilles de type 5x5 et College Ruled.
+
+\subsection{Commandes et environnements}
+
+Les commandes et environnements sont suffixées différemment, mais le reste est identique !
+
+\begin{PresentationCode}{listing only}
+\pagestyle{empty}
+
+\begin{PleinePageCinqCinq}[options]
+	\LignePapierCinqCinq[options]<alignement>(ajustement){texte}
+	\CadreNoteCinqCinq[hauteur]{numligne}
+	\ParagraphePapierCinqCinq[options]<alignement>(ajustement){texte}
+\end{PleinePageSeyes}
+\end{PresentationCode}
+
+\begin{PresentationCode}{listing only}
+\pagestyle{empty}
+
+\begin{PleinePageRuled}[options]
+	\LignePapierRuled[options]<alignement>(ajustement){texte}
+	\CadreNoteRuled[hauteur]{numligne}
+	\ParagraphePapierRuled[options]<alignement>(ajustement){texte}
+\end{PleinePageSeyes}
+\end{PresentationCode}
+
+\subsection{Exemples}
+
+Les exemples des pages suivantes ont été obtenus de la même manière que celui de la pleine page Seyes, il \textit{suffit} d'adapter les commandes et environnements avec le bon suffixe.
+
+\begin{PresentationCode}{listing only}
+\pagestyle{empty}
+
+\begin{PleinePageCinqCinq}[NumLignes]
+	\LignePapierCinqCinq[Echelle=1.25,Ligne=1]{C. PIERQUET \hfill LaTeX}
+	\LignePapierCinqCinq[Echelle=1.25,Ligne=3,Couleur=red]<center>{\underline{\cursive\bfseries Devoir 2}}
+	\CadreNoteCinqCinq{4}
+	\LignePapierCinqCinq[Echelle=1.25,Ligne=9,Couleur=ForestGreen]{\sffamily\underline{Exercice 1 :}}
+	\ParagraphePapierCinqCinq[Ligne=11]{\cursive\lipsum[1]}
+	\ParagraphePapierCinqCinq[Ligne=30]
+	{%
+		On essaye avec des maths $1+\frac12=\frac32$ en mode ligne avec des lignes assez longues pour voir
+		ce que ça peut donner\ldots Et une intégrale $\int_0^1 2x dx = 1$.\\On essaye en passant à la ligne !!!
+	}
+\end{PleinePageCinqCinq}
+\end{PresentationCode}
+
+\begin{PresentationCode}{listing only}
+\pagestyle{empty}
+
+\begin{PleinePageRuled}[NumLignes]
+	\LignePapierRuled[Echelle=1.25,Ligne=1]{C. PIERQUET \hfill LaTeX}
+	\LignePapierRuled[Echelle=1.25,Ligne=2,Couleur=red]<center>{\underline{\cursive\bfseries Devoir 3}}
+	\CadreNoteRuled{3}
+	\LignePapierRuled[Echelle=1.25,Ligne=8,Couleur=ForestGreen]{\sffamily\underline{Exercice 1 :}}
+	\ParagraphePapierRuled[Ligne=9]{\cursive\lipsum[1]}
+	\ParagraphePapierRuled[Ligne=22]
+	{%
+		On essaye avec des maths $1+\frac12=\frac32$ en mode ligne avec des lignes assez longues pour voir
+		ce que ça peut donner\ldots Et une intégrale $\int_0^1 2x dx = 1$.\\On essaye en passant à la ligne !!!
+	}
+\end{PleinePageRuled}
+\end{PresentationCode}
+
+\pagebreak
+
+\pagestyle{empty}
+
+\begin{PleinePageCinqCinq}[NumLignes]
+	\LignePapierCinqCinq[Echelle=1.25,Ligne=1]{C. PIERQUET \hfill LaTeX}
+	\LignePapierCinqCinq[Echelle=1.25,Ligne=3,Couleur=red]<center>{\underline{\cursive\bfseries Devoir 2}}
+	\CadreNoteCinqCinq{4}
+	\LignePapierCinqCinq[Echelle=1.25,Ligne=9,Couleur=ForestGreen]{\sffamily\underline{Exercice 1 :}}
+	\ParagraphePapierCinqCinq[Ligne=11]{\cursive\lipsum[1]}
+	\ParagraphePapierCinqCinq[Ligne=30]
+	{%
+		On essaye avec des maths $1+\frac12=\frac32$ en mode ligne avec des lignes assez longues pour voir
+		ce que ça peut donner\ldots Et une intégrale $\int_0^1 2x dx = 1$.\\On essaye en passant à la ligne !!!
+	}
+\end{PleinePageCinqCinq}
+
+\pagebreak
+
+\pagestyle{empty}
+
+\begin{PleinePageRuled}[NumLignes]
+	\LignePapierRuled[Echelle=1.25,Ligne=1]{C. PIERQUET \hfill LaTeX}
+	\LignePapierRuled[Echelle=1.25,Ligne=2,Couleur=red]<center>{\underline{\cursive\bfseries Devoir 3}}
+	\CadreNoteRuled{3}
+	\LignePapierRuled[Echelle=1.25,Ligne=8,Couleur=ForestGreen]{\sffamily\underline{Exercice 1 :}}
+	\ParagraphePapierRuled[Ligne=9]{\cursive\lipsum[1]}
+	\ParagraphePapierRuled[Ligne=22]
+	{%
+		On essaye avec des maths $1+\frac12=\frac32$ en mode ligne avec des lignes assez longues pour voir
+		ce que ça peut donner\ldots Et une intégrale $\int_0^1 2x dx = 1$.\\On essaye en passant à la ligne !!!
+	}
+\end{PleinePageRuled}
+
+\pagebreak
+
+\section{Historique}
+
+\verb|v0.1.1|~:~~~~Meilleure gestion des couleurs du quadrillage + Ajout pages complètes
 
 \verb|v0.1.0|~:~~~~Version initiale
 
