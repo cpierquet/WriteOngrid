@@ -48,8 +48,8 @@
 \setlength{\parindent}{0pt}
 \definecolor{LightGray}{gray}{0.9}
 
-\def\TPversion{0.1.1}
-\def\TPdate{20 Janvier 2023}
+\def\TPversion{0.1.2}
+\def\TPdate{21 Janvier 2023}
 
 \usepackage[most]{tcolorbox}
 \tcbuselibrary{minted}
@@ -132,7 +132,7 @@
 \end{EnvQuadrillage}
 \end{center}
 
-\begin{EnvQuadrillage}[NbCarreaux=24x5,Marge=1,Elargir=2/2,Grille=Seyes]<Plum!75/LightSteelBlue!50>
+\begin{EnvQuadrillage}[NbCarreaux=24x5,Marge=1,Elargir=2/2,Grille=Seyes]<\CoulSeyes>
 	\EcrireLigne[Echelle=1.5]{\textcolor{red}{mon texte sur la ligne 1\ldots}}
 	\EcrireLigne[Echelle=1.5]{\textcolor{blue}{mon texte sur la ligne 2\ldots}}
 	\EcrireLigne[Echelle=1.5,DecalH=-1]{$1+\frac{1}{2}=\frac32$ et $(1+x)^2=1+2x+x^2$ sur la ligne 3\ldots}
@@ -234,9 +234,21 @@ Ci-dessous on représente une grille $5\times5$ :
 
 Il est à noter que le figure \texttt{tikzpicture} est \textit{délimitée} par le \textcolor{ForestGreen}{\textit{cadre}}, afin de pouvoir gérer les débordements et l'alignement de l'environnement !
 
-\medskip
+\smallskip
 
 De plus, le bord gauche du \textcolor{ForestGreen}{\textit{cadre}} est aligné sur la marge gauche de la page, donc la position du quadrillage dépend en partie de la configuration de \texttt{\textbackslash parindent}.
+
+\subsection{Couleurs prédéfinies}
+
+Le package \textsf{WriteOnGrid} définit également des couleurs pour une saisie plus facile !
+
+\begin{PresentationCode}{listing only}
+\definecolor{TyrianPurple}{rgb}{0.4,0.01,0.24}
+%Couleurs adaptées pour le Seyes
+\def\CoulSeyes{Plum!75/LightSteelBlue!50}
+%Couleurs adaptées pour le Ruled
+\def\CoulRuled{LightSteelBlue!50/TyrianPurple}
+\end{PresentationCode}
 
 \pagebreak
 
@@ -267,8 +279,8 @@ Le premier argument, \textit{optionnel}, entre \texttt{[...]} propose les \Cle{c
 Le second argument, \textit{optionnel}, entre \texttt{<...>} correspond quant à lui à la couleur de base du quadrillage :
 
 \begin{itemize}
-	\item sous la forme \Cle{Couleur} (\Cle{lightgray!50} par défaut) pour le quadrillage $5\times5$ ou Ruled ;
-	\item sous la forme \Cle{CouleurP/CouleurS} (\Cle{lightgray!50/lightgray!25} par défaut) pour le Seyes.
+	\item sous la forme \Cle{Couleur} (\Cle{lightgray!50} par défaut) pour le quadrillage $5\times5$ ;
+	\item sous la forme \Cle{CouleurP/CouleurS} (\Cle{lightgray!50/lightgray!25} par défaut) pour le Seyes ou le Ruled.
 \end{itemize}
 
 \medskip
@@ -277,23 +289,23 @@ Le second argument, \textit{optionnel}, entre \texttt{<...>} correspond quant à
 %des cadres ont été rajoutés pour la sortie
 
 %18x4 grands carreaux, sans dépassement, couleurs adaptées, marge de 3 carreaux
-\begin{EnvQuadrillage}[NbCarreaux=18x4,Grille=Seyes,Marge=3]<Plum!75/LightSteelBlue!50>
+\begin{EnvQuadrillage}[NbCarreaux=18x4,Grille=Seyes,Marge=3]<\CoulSeyes>
 \end{EnvQuadrillage}
 
 %36x8 petits carreaux, avec débordements 3/3, couleur LightSteelBlue!50
 \begin{EnvQuadrillage}[NbCarreaux=36x8,Elargir=3/3]<LightSteelBlue!50>
 \end{EnvQuadrillage}
 
-%12x3 lignes "Ruled", sans débordements, couleur orange!50, centré, avec marge
+%12x3 lignes "Ruled", sans débordements, couleur Ruled, centré, avec marge
 \begin{center}
-	\begin{EnvQuadrillage}[NbCarreaux=12x3,Elargir=2/2,Grille=Ruled,Marge=2]<orange!50>
+	\begin{EnvQuadrillage}[NbCarreaux=12x3,Elargir=2/2,Grille=Ruled,Marge=2]<\CoulRuled>
 	\end{EnvQuadrillage}
 \end{center}
 \end{PresentationCode}
 
 \medskip
 
-\begin{EnvQuadrillage}[NbCarreaux=18x4,Grille=Seyes,Marge=3]<Plum!75/LightSteelBlue!50>
+\begin{EnvQuadrillage}[NbCarreaux=18x4,Grille=Seyes,Marge=3]<\CoulSeyes>
 \end{EnvQuadrillage}
 
 \smallskip
@@ -302,7 +314,7 @@ Le second argument, \textit{optionnel}, entre \texttt{<...>} correspond quant à
 \end{EnvQuadrillage}
 
 \begin{center}
-	\begin{EnvQuadrillage}[NbCarreaux=12x3,Grille=Ruled,Marge=2]<orange!50>
+	\begin{EnvQuadrillage}[NbCarreaux=12x3,Grille=Ruled,Marge=2]<\CoulRuled>
 \end{EnvQuadrillage}
 \end{center}
 
@@ -339,7 +351,7 @@ Le deuxième argument, \textit{optionnel}, entre \texttt{<...>} permet de spéci
 
 \medskip
 
-Le troisième argument, \textit{mandataire} et entre \texttt{\{...\}} est quant à lui le texte à saisir, avec possibilité de spécifier taille, couleur, fonte, etc
+Le troisième argument, \textit{obligatoire} et entre \texttt{\{...\}} est quant à lui le texte à saisir, avec possibilité de spécifier taille, couleur, fonte, etc
 
 \begin{PresentationCode}{listing only}
 \begin{EnvQuadrillage}[NbCarreaux=36x8]
@@ -447,7 +459,7 @@ Le troisième argument, \textit{optionnel} et entre \texttt{(...)}, permet de po
 
 \smallskip
 
-Le dernier argument, \textit{mandataire} et entre \texttt{\{...\}} est le texte à placer, avec les options classiques en langage \TeX{} !
+Le dernier argument, \textit{obligatoire} et entre \texttt{\{...\}} est le texte à placer, avec les options classiques en langage \TeX{} !
 
 \subsection{Une commande pour un cadre de note}
 
@@ -488,7 +500,7 @@ Le troisième argument, \textit{optionnel} et entre \texttt{(...)}, permet de po
 
 \smallskip
 
-Le dernier argument, \textit{mandataire} et entre \texttt{\{...\}} est le paragraphe à placer, avec les options classiques en langage \TeX{}, et le passage à la ligne effectué par \texttt{\textbackslash\textbackslash} !
+Le dernier argument, \textit{obligatoire} et entre \texttt{\{...\}} est le paragraphe à placer, avec les options classiques en langage \TeX{}, et le passage à la ligne effectué par \texttt{\textbackslash\textbackslash} !
 
 \subsection{Exemple \og détaillé \fg}
 
@@ -679,6 +691,8 @@ Les exemples des pages suivantes ont été obtenus de la même manière que celu
 \pagebreak
 
 \section{Historique}
+
+\verb|v0.1.2|~:~~~~Ajustement au niveau des couleurs + raccourcis couleurs par défaut
 
 \verb|v0.1.1|~:~~~~Meilleure gestion des couleurs du quadrillage + Ajout pages complètes
 

@@ -45,8 +45,8 @@
 \setlength{\parindent}{0pt}
 \definecolor{LightGray}{gray}{0.9}
 
-\def\TPversion{0.1.1}
-\def\TPdate{20/01/2023}
+\def\TPversion{0.1.2}
+\def\TPdate{21/01/2023}
 
 \usepackage[most]{tcolorbox}
 \tcbuselibrary{minted}
@@ -125,7 +125,7 @@
 \end{EnvGrid}
 \end{center}
 
-\begin{EnvGrid}[NumSquares=24x5,Margin=1,Enlarge=2/2,Grid=Seyes]<Plum!75/LightSteelBlue!50>
+\begin{EnvGrid}[NumSquares=24x5,Margin=1,Enlarge=2/2,Grid=Seyes]<\ColSeyes>
 	\WriteLine[Scale=1.5]{\textcolor{red}{my text on line 1\ldots}}
 	\WriteLine[Scale=1.5]{\textcolor{blue}{my text on line 2\ldots}}
 	\WriteLine[Scale=1.5,OffsetH=-1]{$1+\frac{1}{2}=\frac32$ et $(1+x)^2=1+2x+x^2$ on line 3\ldots}
@@ -218,13 +218,25 @@ For example, a $5\times5$ grid :
 	\draw[ForestGreen,thick] (0,0) rectangle ({0.5*24},{-0.5*5}) ;
 \end{tikzpicture}
 
-\vspace{1.5cm}
+\vspace{1.25cm}
 
 The \texttt{tikzpicture} is \textit{bounded} by the \textcolor{ForestGreen}{\textit{border}}, in order to specify overtakings or alignment.
 
-\medskip
+\smallskip
 
 Le left-border of the \textcolor{ForestGreen}{\textit{border}} is aligned on the left-margin of the page, so take care of the \texttt{\textbackslash parindent}.
+
+\subsection{Predefined colors}
+
+The package \textsf{WriteOnGrid} proposes "shortcuts" for classic colors !
+
+\begin{PresentationCode}{listing only}
+\definecolor{TyrianPurple}{rgb}{0.4,0.01,0.24}
+%Colors for Seyes
+\def\ColSeyes{Plum!75/LightSteelBlue!50}
+%Colors for Ruled
+\def\ColRuled{LightSteelBlue!50/TyrianPurple}
+\end{PresentationCode}
 
 \pagebreak
 
@@ -254,31 +266,31 @@ The first argument, \textit{optional}, between \texttt{[...]} give the \Cle{keys
 The second argument, \textit{optional}, between \texttt{<...>} is the color(s) of the grid :
 
 \begin{itemize}
-	\item by \Cle{Color} (\Cle{lightgray!50} by default) for $5\times5$ or Ruled ;
-	\item by \Cle{ColorA/ColorB} (\Cle{lightgray!50/lightgray!25} by default) for Seyes.
+	\item by \Cle{Color} (\Cle{lightgray!50} by default) for $5\times5$  ;
+	\item by \Cle{ColorA/ColorB} (\Cle{lightgray!50/lightgray!25} by default) for Seyes or Ruled.
 \end{itemize}
 
 \medskip
 
 \begin{PresentationCode}{listing only}
-%18x4 big squares, w/o overtaking, 3-margin
-\begin{EnvGrid}[NumSquares=18x4,Grid=Seyes,Margin=3]<Plum!75/LightSteelBlue!50>
+%18x4 big squares, w/o overtaking, Seyes colors, 3-margin
+\begin{EnvGrid}[NumSquares=18x4,Grid=Seyes,Margin=3]<\ColSeyes>
 \end{EnvGrid}
 
 %36x8 small squares, overtakings 3/3, LightSteelBlue color
 \begin{EnvGrid}[NumSquares=36x8,Enlarge=3/3]<LightSteelBlue>
 \end{EnvGrid}
 
-%12x3 lines "Ruled", w/o overtakins, orange!50 color, centered, with 2-margin
+%12x3 lines "Ruled", w/o overtakins, Ruled colors, centered, with 2-margin
 \begin{center}
-	\begin{EnvGrid}[NumSquares=12x3,Grid=Ruled,Margin=2]<orange!50>
+	\begin{EnvGrid}[NumSquares=12x3,Grid=Ruled,Margin=2]<\ColRuled>
 	\end{EnvGrid}
 \end{center}
 \end{PresentationCode}
 
 \medskip
 
-\begin{EnvGrid}[NumSquares=18x4,Grid=Seyes,Margin=3]<Plum!75/LightSteelBlue!50>
+\begin{EnvGrid}[NumSquares=18x4,Grid=Seyes,Margin=3]<\ColSeyes>
 \end{EnvGrid}
 
 \smallskip
@@ -289,7 +301,7 @@ The second argument, \textit{optional}, between \texttt{<...>} is the color(s) o
 \smallskip
 
 \begin{center}
-	\begin{EnvGrid}[NumSquares=12x3,Grid=Ruled,Margin=2]<orange!50>
+	\begin{EnvGrid}[NumSquares=12x3,Grid=Ruled,Margin=2]<\ColRuled>
 	\end{EnvGrid}
 \end{center}
 
@@ -351,14 +363,14 @@ Le third argument, \textit{mandatory} and between \texttt{\{...\}} is the text, 
 \end{EnvGrid}
 
 \begin{PresentationCode}{listing only}
-\begin{EnvGrid}[NumSquares=16x4,Margin=2,Grid=Ruled]
+\begin{EnvGrid}[NumSquares=16x4,Margin=2,Grid=Ruled]<\ColRuled>
 	\WriteLine[Scale=1.5]{\textcolor{red}{red text on line 1\ldots}}
 	\WriteLine[Scale=1.15,OffsetH=1]{$(1+x)^2=1+2x+x^2$ on line 2, with 1-square offset\ldots}
 	\WriteLine[OffsetH=-1]{\textcolor{blue}{blue text, back to left, on line 3\ldots}}
 \end{EnvGrid}
 
 \end{PresentationCode}
-\begin{EnvGrid}[NumSquares=16x4,Margin=2,Grid=Ruled]
+\begin{EnvGrid}[NumSquares=16x4,Margin=2,Grid=Ruled]<\ColRuled>
 	\WriteLine[Scale=1.5]{\textcolor{red}{red text on line 1\ldots}}
 	\WriteLine[Scale=1.15,OffsetH=1]{$(1+x)^2=1+2x+x^2$ on line 2, with 1-square offset\ldots}
 	\WriteLine[OffsetH=-1]{\textcolor{blue}{blue text, back to left, on line 3\ldots}}
@@ -374,7 +386,7 @@ There's few other possibilities with the package\textsf{WorkOnGrid}, but for the
 
 \smallskip
 
-To sum up, they create full paper grid, with the ability to write paragraph.
+To sum up, they create full paper grid (by preference for \texttt{\textbf{a4paper}}), with the ability to write paragraph.
 
 \section{Example}
 
@@ -416,6 +428,8 @@ To sum up, they create full paper grid, with the ability to write paragraph.
 
 
 \part*{History}
+
+\verb|v0.1.2|~:~~~~Shortcuts for default colors + small bugfixes
 
 \verb|v0.1.1|~:~~~~Best color choice
 
