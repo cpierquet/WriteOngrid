@@ -48,8 +48,8 @@
 \setlength{\parindent}{0pt}
 \definecolor{LightGray}{gray}{0.9}
 
-\def\TPversion{0.1.2}
-\def\TPdate{30 Janvier 2023}
+\def\TPversion{0.1.3}
+\def\TPdate{18 Mars 2023}
 
 \usepackage[most]{tcolorbox}
 \tcbuselibrary{minted}
@@ -254,6 +254,65 @@ Le package \textsf{WriteOnGrid} définit également des couleurs pour une saisie
 
 \section{Grilles individuelles}
 
+\subsection{La commande}
+
+\begin{PresentationCode}{listing only}
+%commande francisée, avec clés en français pour préparer la grille
+
+\AffQuadrillage[clés]<couleur(s)>
+\end{PresentationCode}
+
+Le premier argument, \textit{optionnel}, entre \texttt{[...]} propose les \Cle{clés} :
+
+\begin{itemize}
+	\item \Cle{NbCarreaux} pour spécifier le nombre de carreaux, sous la forme \texttt{(nbCol)x(nbLig)} ; \hfill~défaut : \Cle{17x5}
+	\item \Cle{Unite} pour spécifier l'échelle de la figure ; \hfill~défaut : \Cle{1}
+	\item \Cle{Marge} pour spécifier la \textcolor{orange}{marge} du début des lignes ; \hfill~défaut : \Cle{0}
+	\item le booléen \Cle{AffBarre} pour afficher ou non la marge ; \hfill~défaut : \Cle{true}
+	\item \Cle{Elargir} pour préciser les carreaux de débordements, sous la forme unique \texttt{\textcolor{red}{G}\textcolor{blue}{D}} ou par côté \texttt{\textcolor{red}{G}/\textcolor{blue}{D}} ;\hfill~défaut : \Cle{0}
+	\item le booléen \Cle{Cadre} pour afficher le cadre de base du quadrillage ;\hfill~défaut : \Cle{false}
+	\item la clé \Cle{Grille}, parmi \Cle{5x5 / Seyes / Ruled}, pour spécifier le type de quadrillage ;\hfill~défaut : \Cle{5x5}
+	\item la clé \Cle{CouleurBarreSeyes} pour rajouter un trait vertical pour le papier Seyes .\hfill~défaut : \Cle{red!75}
+\end{itemize}
+
+Le second argument, \textit{optionnel}, entre \texttt{<...>} correspond quant à lui à la couleur de base du quadrillage :
+
+\begin{itemize}
+	\item sous la forme \Cle{Couleur} (\Cle{lightgray!50} par défaut) pour le quadrillage $5\times5$ ;
+	\item sous la forme \Cle{CouleurP/CouleurS} (\Cle{lightgray!50/lightgray!25} par défaut) pour le Seyes ou le Ruled.
+\end{itemize}
+
+\medskip
+
+\begin{PresentationCode}{listing only}
+%des cadres ont été rajoutés pour la sortie
+
+%18x4 grands carreaux, sans dépassement, couleurs adaptées, sans marge/barre
+\AffQuadrillage[NbCarreaux=18x4,Grille=Seyes,AffBarre=false]<\CoulSeyes>
+
+%36x8 petits carreaux, avec débordements 3/3, couleur LightSteelBlue!50
+\AffQuadrillage[NbCarreaux=36x8,Elargir=3/3]<LightSteelBlue!50>
+
+%12x3 lignes "Ruled", sans débordements, couleur Ruled, centré, avec marge
+\begin{center}
+	\AffQuadrillage[NbCarreaux=12x3,Elargir=2/2,Grille=Ruled,Marge=2]<\CoulRuled>
+\end{center}
+\end{PresentationCode}
+
+\medskip
+
+\AffQuadrillage[NbCarreaux=18x4,Grille=Seyes,AffBarre=false]<\CoulSeyes>
+
+\medskip
+
+\AffQuadrillage[NbCarreaux=36x8,Elargir=3/3]<LightSteelBlue!50>
+
+\begin{center}
+	\AffQuadrillage[NbCarreaux=12x3,Elargir=2/2,Grille=Ruled,Marge=2]<\CoulRuled>
+\end{center}
+
+\pagebreak
+
 \subsection{L'environnement}
 
 \begin{PresentationCode}{listing only}
@@ -270,6 +329,7 @@ Le premier argument, \textit{optionnel}, entre \texttt{[...]} propose les \Cle{c
 	\item \Cle{NbCarreaux} pour spécifier le nombre de carreaux, sous la forme \texttt{(nbCol)x(nbLig)} ; \hfill~défaut : \Cle{17x5}
 	\item \Cle{Unite} pour spécifier l'échelle de la figure ; \hfill~défaut : \Cle{1}
 	\item \Cle{Marge} pour spécifier la \textcolor{orange}{marge} du début des lignes ; \hfill~défaut : \Cle{0}
+	\item le booléen \Cle{AffBarre} pour afficher ou non la marge ; \hfill~défaut : \Cle{true}
 	\item \Cle{Elargir} pour préciser les carreaux de débordements, sous la forme unique \texttt{\textcolor{red}{G}\textcolor{blue}{D}} ou par côté \texttt{\textcolor{red}{G}/\textcolor{blue}{D}} ;\hfill~défaut : \Cle{0}
 	\item le booléen \Cle{Cadre} pour afficher le cadre de base du quadrillage ;\hfill~défaut : \Cle{false}
 	\item la clé \Cle{Grille}, parmi \Cle{5x5 / Seyes / Ruled}, pour spécifier le type de quadrillage ;\hfill~défaut : \Cle{5x5}
@@ -322,7 +382,7 @@ Le second argument, \textit{optionnel}, entre \texttt{<...>} correspond quant à
 
 \subsection{Écrire sur les lignes}
 
-L'idée est maintenant de pouvoir écrire sur les lignes du quadrillage créé, et pour garantir le fait d'écrire \textit{pile} sur le ligne, on applique les recommandations suivantes :
+L'idée est maintenant de pouvoir écrire sur les lignes du quadrillage créé (environnement !), et pour garantir le fait d'écrire \textit{pile} sur le ligne, on applique les recommandations suivantes :
 
 \begin{itemize}
 	\item les lignes doivent être saisies une par une, du \og haut \fg{} vers le \og bas \fg{} ;
@@ -691,6 +751,8 @@ Les exemples des pages suivantes ont été obtenus de la même manière que celu
 \pagebreak
 
 \section{Historique}
+
+\verb|v0.1.3|~:~~~~Ajout d'une commande pour afficher (sans écrire dessus) une grille
 
 \verb|v0.1.2|~:~~~~Ajustement au niveau des couleurs + raccourcis couleurs par défaut
 

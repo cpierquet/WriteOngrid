@@ -45,8 +45,8 @@
 \setlength{\parindent}{0pt}
 \definecolor{LightGray}{gray}{0.9}
 
-\def\TPversion{0.1.2}
-\def\TPdate{30/01/2023}
+\def\TPversion{0.1.3}
+\def\TPdate{18/03/2023}
 
 \usepackage[most]{tcolorbox}
 \tcbuselibrary{minted}
@@ -242,7 +242,65 @@ The package \textsf{WriteOnGrid} proposes "shortcuts" for classic colors !
 
 \section{Commands, keys and options}
 
-\subsection{The environement}
+\subsection{The command}
+
+\begin{PresentationCode}{listing only}
+%command, with keys to prepare the grid
+
+\DispGrid[keys]<color>
+\end{PresentationCode}
+
+The first argument, \textit{optional}, between \texttt{[...]} give the \Cle{keys} :
+
+\begin{itemize}
+	\item \Cle{NumSquares} to specify the size of the grid, under \texttt{(nbCol)x(nbRow)} ; \hfill~default : \Cle{17x5}
+	\item \Cle{Unit} to specify the scale of the grid ; \hfill~default : \Cle{1}
+	\item \Cle{Margin} to specify the global \textcolor{orange}{margin} at the beginning of the lines ; \hfill~default : \Cle{0}
+	\item the boolean \Cle{DispBar} to display or not the bar ; \hfill~défaut : \Cle{true}
+	\item \Cle{Enlarge} to specify the squares-overtakings, globally with \texttt{\textcolor{red}{L}\textcolor{blue}{R}} or side by side with \texttt{\textcolor{red}{L}/\textcolor{blue}{R}} ;\hfill~default : \Cle{0}
+	\item the boolean \Cle{Border} to display the basis border of the grid ;\hfill~default : \Cle{false}
+	\item the key\Cle{Grille}, from \Cle{5x5/Seyes/Ruled}, to specify the grid's type.\hfill~défaut : \Cle{5x5}
+\end{itemize}
+
+The second argument, \textit{optional}, between \texttt{<...>} is the color(s) of the grid :
+
+\begin{itemize}
+	\item by \Cle{Color} (\Cle{lightgray!50} by default) for $5\times5$  ;
+	\item by \Cle{ColorA/ColorB} (\Cle{lightgray!50/lightgray!25} by default) for Seyes or Ruled.
+\end{itemize}
+
+\medskip
+
+\begin{PresentationCode}{listing only}
+%18x4 big squares, w/o overtaking, Seyes colors, w/o margin/bar
+\DispGrid[NumSquares=18x4,Grid=Seyes,DispBar=false]<\ColSeyes>
+
+%36x8 small squares, overtakings 3/3, LightSteelBlue color
+\DispGrid[NumSquares=36x8,Enlarge=3/3]<LightSteelBlue>
+
+%12x3 lines "Ruled", w/o overtakins, Ruled colors, centered, with 2-margin
+\begin{center}
+	\DispGrid[NumSquares=12x3,Grid=Ruled,Margin=2]<\ColRuled>
+\end{center}
+\end{PresentationCode}
+
+\medskip
+
+\DispGrid[NumSquares=18x4,Grid=Seyes,DispBar=false]<\ColSeyes>
+
+\medskip
+
+\DispGrid[NumSquares=36x8,Enlarge=3/3]<LightSteelBlue>
+
+\smallskip
+
+\begin{center}
+	\DispGrid[NumSquares=12x3,Grid=Ruled,Margin=2]<\ColRuled>
+\end{center}
+
+\pagebreak
+
+\subsection{The environment}
 
 \begin{PresentationCode}{listing only}
 %environment, with keys to prepare the grid
@@ -258,6 +316,7 @@ The first argument, \textit{optional}, between \texttt{[...]} give the \Cle{keys
 	\item \Cle{NumSquares} to specify the size of the grid, under \texttt{(nbCol)x(nbRow)} ; \hfill~default : \Cle{17x5}
 	\item \Cle{Unit} to specify the scale of the grid ; \hfill~default : \Cle{1}
 	\item \Cle{Margin} to specify the global \textcolor{orange}{margin} at the beginning of the lines ; \hfill~default : \Cle{0}
+	\item the boolean \Cle{DispBar} to display or not the bar ; \hfill~défaut : \Cle{true}
 	\item \Cle{Enlarge} to specify the squares-overtakings, globally with \texttt{\textcolor{red}{L}\textcolor{blue}{R}} or side by side with \texttt{\textcolor{red}{L}/\textcolor{blue}{R}} ;\hfill~default : \Cle{0}
 	\item the boolean \Cle{Border} to display the basis border of the grid ;\hfill~default : \Cle{false}
 	\item the key\Cle{Grille}, from \Cle{5x5/Seyes/Ruled}, to specify the grid's type.\hfill~défaut : \Cle{5x5}
@@ -309,7 +368,7 @@ The second argument, \textit{optional}, between \texttt{<...>} is the color(s) o
 
 \subsection{Write on the lines}
 
-The idea is to write on the created grid. In order to write \textit{right} on the lines, we can :
+The idea is to write on the created grid (environment !). In order to write \textit{right} on the lines, we can :
 
 \begin{itemize}
 	\item give the lines one by one ;
@@ -428,6 +487,8 @@ To sum up, they create full paper grid (by preference for \texttt{\textbf{a4pape
 
 
 \part*{History}
+
+\verb|v0.1.3|~:~~~~Command to display a grid (w/o writing on it)
 
 \verb|v0.1.2|~:~~~~Shortcuts for default colors + small bugfixes
 

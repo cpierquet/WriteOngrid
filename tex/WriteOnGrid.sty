@@ -2,7 +2,8 @@
 % licence                        : Released under the LaTeX Project Public License v1.3c or later, see http://www.latex-project.org/lppl.txtf
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{WriteOnGrid}[2023/01/30 v0.1.2 package to write on grid lines]
+\ProvidesPackage{WriteOnGrid}[2023/03/18 v0.1.3 package to write on grid lines]
+% 0.1.3		Ajout de commandes simples pour des mini-quadrillages autonomes, sans texte
 % 0.1.2		Modification locale des couleurs + raccourcis couleurs Seyes / Ruled
 % 0.1.1		Ajout de la couleur + modifications mineures + grille "Ruled" + grilles pleine page !
 % 0.1.0		Version initiale [fr] & [en]
@@ -37,12 +38,15 @@
 	\node[text width=\fpeval{\ValeurCarreau*\QuadNbCol/\QuadEchelle-\ValeurCarreau*\useKV[Quadrill]{Marge}/\QuadEchelle}cm,align=#2,scale=\QuadEchelle,anchor=base west,inner sep={\useKV[LigneQuadrill]{Sep}}] at ($({\ValeurCarreau*\useKV[Quadrill]{Marge}+\ValeurCarreau*\useKV[LigneQuadrill]{DecalH}},{-\ValeurCarreau*\thelgquadri})+(0.025,\useKV[LigneQuadrill]{DecalV})$) {\strut #3} ;
 }
 
+%déf des clés
+
 \defKV[Quadrill]{%
 	Grille=\xdef\QuadType{#1},%
 	NbCarreaux=\xdef\QuadNbCar{#1},%
 	Elargir=\xdef\QuadElar{#1},%
 	CouleurBarreSeyes=\xdef\QuadCoulSeyes{#1}
-	}%déf des clés
+}
+
 \setKVdefault[Quadrill]{%
 	NbCarreaux=17x5,%
 	Unite=1,%
@@ -50,8 +54,62 @@
 	Elargir=0,%
 	Cadre=false,%
 	Grille=5x5,%
+	AffBarre=true,%
 	CouleurBarreSeyes={red!75}
-	}
+}
+
+\NewDocumentCommand\AffQuadrillage{ O{} D<>{lightgray!50/lightgray!25} }{%affichage simple du quadrillage
+	\setcounter{lgquadri}{0}%on réinitialise les lignes
+	\useKVdefault[Quadrill]%on met les clés par défaut
+	\setKV[Quadrill]{#1}%on lit les clés
+	\IfSubStr{#2}{/}%on récupère les couleurs
+		{\StrCut{#2}{/}{\QuadCoulA}{\QuadCoulB}}
+		{\def\QuadCoulA{#2}\def\QuadCoulB{#2}}%
+	\StrCut{\QuadNbCar}{x}{\QuadNbCol}{\QuadNbLig}%
+	\IfStrEq{\QuadType}{Seyes}%les types de quadrillages
+		{\xdef\ValeurCarreau{0.8}}%
+		{}%
+	\IfStrEq{\QuadType}{5x5}%
+		{\xdef\ValeurCarreau{0.5}}%
+		{}%
+	\IfStrEq{\QuadType}{Ruled}%
+		{\xdef\ValeurCarreau{0.9}}%
+		{}%
+	\IfSubStr{\QuadElar}{/}%on récupère les élargissements G et D
+		{\StrCut{\QuadElar}{/}{\QuadElarG}{\QuadElarD}}%
+		{\def\QuadElarG{\QuadElar}\def\QuadElarD{\QuadElar}}%
+	\begin{tikzpicture}[xscale={\useKV[Quadrill]{Unite}},yscale={\useKV[Quadrill]{Unite}}]
+		\useasboundingbox (0,0) rectangle ({\ValeurCarreau*\QuadNbCol},{-\ValeurCarreau*\QuadNbLig}) ;%on fixe la grille de base, avant élargissement éventuel
+		\IfStrEq{\QuadType}{Seyes}%
+			{%
+				\draw[xstep=0.8,ystep=0.2,thin,\QuadCoulB] ({-\ValeurCarreau*\QuadElarG},0) grid ({\ValeurCarreau*\QuadNbCol+\ValeurCarreau*\QuadElarD},{-\ValeurCarreau*\QuadNbLig}) ;%grille seyes
+				\draw[xstep=0.8,ystep=0.8,\QuadCoulA] ({-\ValeurCarreau*\QuadElarG},0) grid ({\ValeurCarreau*\QuadNbCol+\ValeurCarreau*\QuadElarD},{-\ValeurCarreau*\QuadNbLig}) ;%grille seyes
+				\ifboolKV[Quadrill]{AffBarre}
+					{
+						\draw[thick,\QuadCoulSeyes] ({\ValeurCarreau*\useKV[Quadrill]{Marge}},0) -- ({\ValeurCarreau*\useKV[Quadrill]{Marge}},{-\ValeurCarreau*\QuadNbLig}) ;%barre Seyes
+					}{}
+			}%
+			{}%
+		\IfStrEq{\QuadType}{5x5}%
+			{%
+				\draw[xstep=0.5,ystep=0.5,thin,\QuadCoulA] ({-\ValeurCarreau*\QuadElarG},0) grid ({\ValeurCarreau*\QuadNbCol+\ValeurCarreau*\QuadElarD},{-\ValeurCarreau*\QuadNbLig}) ;%grille 5x5
+			}%
+			{}%
+		\IfStrEq{\QuadType}{Ruled}%
+		{%
+			\foreach \LLL in {0,1,...,\QuadNbLig} {\draw[,thin,\QuadCoulA] ({-\ValeurCarreau*\QuadElarG},{-\LLL*\ValeurCarreau}) -- ({\ValeurCarreau*\QuadNbCol+\ValeurCarreau*\QuadElarD},{-\ValeurCarreau*\LLL}) ; }
+			%\draw[xstep={\ValeurCarreau*\QuadNbCol},ystep=0.9,thin,\QuadCoulA] ({-\ValeurCarreau*\QuadElarG},0) grid ({\ValeurCarreau*\QuadNbCol+\ValeurCarreau*\QuadElarD},{-\ValeurCarreau*\QuadNbLig}) ;%grille college
+			\ifboolKV[Quadrill]{AffBarre}
+				{
+					\draw[thick,\QuadCoulB] ({\ValeurCarreau*\useKV[Quadrill]{Marge}},0) -- ({\ValeurCarreau*\useKV[Quadrill]{Marge}},{-\ValeurCarreau*\QuadNbLig}) ;%barre college
+				}{}
+		}%
+		{}%
+		\ifboolKV[Quadrill]{Cadre}%cadre pour visualiser la "marge" (officielle)
+			{\draw[thick] (0,0) rectangle ({\ValeurCarreau*\QuadNbCol},{-\ValeurCarreau*\QuadNbLig}) ;}%
+			{}%
+	\end{tikzpicture}%
+}
 
 \NewDocumentEnvironment{EnvQuadrillage}{ O{} D<>{lightgray!50/lightgray!25} }%créer le quadrillage, couleurs ?
 {%
@@ -80,7 +138,10 @@
 			{%
 				\draw[xstep=0.8,ystep=0.2,thin,\QuadCoulB] ({-\ValeurCarreau*\QuadElarG},0) grid ({\ValeurCarreau*\QuadNbCol+\ValeurCarreau*\QuadElarD},{-\ValeurCarreau*\QuadNbLig}) ;%grille seyes
 				\draw[xstep=0.8,ystep=0.8,\QuadCoulA] ({-\ValeurCarreau*\QuadElarG},0) grid ({\ValeurCarreau*\QuadNbCol+\ValeurCarreau*\QuadElarD},{-\ValeurCarreau*\QuadNbLig}) ;%grille seyes
-				\draw[thick,\QuadCoulSeyes] ({\ValeurCarreau*\useKV[Quadrill]{Marge}},0) -- ({\ValeurCarreau*\useKV[Quadrill]{Marge}},{-\ValeurCarreau*\QuadNbLig}) ;%barre Seyes
+				\ifboolKV[Quadrill]{AffBarre}
+					{
+						\draw[thick,\QuadCoulSeyes] ({\ValeurCarreau*\useKV[Quadrill]{Marge}},0) -- ({\ValeurCarreau*\useKV[Quadrill]{Marge}},{-\ValeurCarreau*\QuadNbLig}) ;%barre Seyes
+					}{}
 			}%
 			{}%
 		\IfStrEq{\QuadType}{5x5}%
@@ -92,7 +153,10 @@
 		{%
 			\foreach \LLL in {0,1,...,\QuadNbLig} {\draw[,thin,\QuadCoulA] ({-\ValeurCarreau*\QuadElarG},{-\LLL*\ValeurCarreau}) -- ({\ValeurCarreau*\QuadNbCol+\ValeurCarreau*\QuadElarD},{-\ValeurCarreau*\LLL}) ; }
 			%\draw[xstep={\ValeurCarreau*\QuadNbCol},ystep=0.9,thin,\QuadCoulA] ({-\ValeurCarreau*\QuadElarG},0) grid ({\ValeurCarreau*\QuadNbCol+\ValeurCarreau*\QuadElarD},{-\ValeurCarreau*\QuadNbLig}) ;%grille college
-			\draw[thick,\QuadCoulB] ({\ValeurCarreau*\useKV[Quadrill]{Marge}},0) -- ({\ValeurCarreau*\useKV[Quadrill]{Marge}},{-\ValeurCarreau*\QuadNbLig}) ;%barre college
+			\ifboolKV[Quadrill]{AffBarre}
+				{
+					\draw[thick,\QuadCoulB] ({\ValeurCarreau*\useKV[Quadrill]{Marge}},0) -- ({\ValeurCarreau*\useKV[Quadrill]{Marge}},{-\ValeurCarreau*\QuadNbLig}) ;%barre college
+				}{}
 		}%
 		{}%
 		\ifboolKV[Quadrill]{Cadre}%cadre pour visualiser la "marge" (officielle)
@@ -117,7 +181,60 @@
 }
 
 \defKV[Quadril]{Grid=\xdef\QuadType{#1},NumSquares=\xdef\QuadNbCar{#1},Enlarge=\xdef\QuadElar{#1}}%déf des clés
-\setKVdefault[Quadril]{Grid=5x5,NumSquares=17x5,Unit=1,Margin=0,Enlarge=0,Border=false}%valeurs par défaut
+\setKVdefault[Quadril]{Grid=5x5,NumSquares=17x5,Unit=1,Margin=0,Enlarge=0,Border=false,DispBar=true}%valeurs par défaut
+
+\NewDocumentCommand\DispGrid{ O{} D<>{lightgray!50/lightgray!25} }{%créer le quadrillage
+	\setcounter{lgquadri}{0}%on réinitialise les lignes
+	\useKVdefault[Quadril]%on met les clés par défaut
+	\setKV[Quadril]{#1}%on lit les clés
+	\IfSubStr{#2}{/}%on récupère les couleurs
+		{\StrCut{#2}{/}{\QuadCoulA}{\QuadCoulB}}
+		{\def\QuadCoulA{#2}\def\QuadCoulB{#2}}%
+	\StrCut{\QuadNbCar}{x}{\QuadNbCol}{\QuadNbLig}%
+	\IfStrEq{\QuadType}{Seyes}%les types de quadrillages
+		{\xdef\ValeurCarreau{0.8}}%
+		{}%
+	\IfStrEq{\QuadType}{5x5}%
+		{\xdef\ValeurCarreau{0.5}}%
+		{}%
+	\IfStrEq{\QuadType}{Ruled}%
+		{\xdef\ValeurCarreau{0.9}}%
+		{}%
+	\IfSubStr{\QuadElar}{/}%on récupère les élargissements G et D
+		{\StrCut{\QuadElar}{/}{\QuadElarG}{\QuadElarD}}%
+		{\def\QuadElarG{\QuadElar}\def\QuadElarD{\QuadElar}}%
+	\begin{tikzpicture}[xscale={\useKV[Quadril]{Unit}},yscale={\useKV[Quadril]{Unit}}]
+		\useasboundingbox (0,0) rectangle ({\ValeurCarreau*\QuadNbCol},{-\ValeurCarreau*\QuadNbLig}) ;%on fixe la grille de base, avant élargissement éventuel
+		\IfStrEq{\QuadType}{Seyes}%
+			{%
+				\draw[xstep=0.8,ystep=0.2,thin,\QuadCoulB] ({-\ValeurCarreau*\QuadElarG},0) grid ({\ValeurCarreau*\QuadNbCol+\ValeurCarreau*\QuadElarD},{-\ValeurCarreau*\QuadNbLig}) ;%grille seyes
+				\draw[xstep=0.8,ystep=0.8,\QuadCoulA] ({-\ValeurCarreau*\QuadElarG},0) grid ({\ValeurCarreau*\QuadNbCol+\ValeurCarreau*\QuadElarD},{-\ValeurCarreau*\QuadNbLig}) ;%grille seyes
+				\ifboolKV[Quadril]{DispBar}
+					{
+						\draw[thick,\QuadCoulSeyes] ({\ValeurCarreau*\useKV[Quadril]{Margin}},0) -- ({\ValeurCarreau*\useKV[Quadril]{Margin}},{-\ValeurCarreau*\QuadNbLig}) ;%barre Seyes
+					}{}
+			}%
+			{}%
+		\IfStrEq{\QuadType}{5x5}%
+			{%
+				\draw[xstep=0.5,ystep=0.5,thin,\QuadCoulA] ({-\ValeurCarreau*\QuadElarG},0) grid ({\ValeurCarreau*\QuadNbCol+\ValeurCarreau*\QuadElarD},{-\ValeurCarreau*\QuadNbLig}) ;%grille 5x5
+			}%
+			{}%
+		\IfStrEq{\QuadType}{Ruled}%
+		{%
+			\foreach \LLL in {0,1,...,\QuadNbLig} {\draw[,thin,\QuadCoulA] ({-\ValeurCarreau*\QuadElarG},{-\LLL*\ValeurCarreau}) -- ({\ValeurCarreau*\QuadNbCol+\ValeurCarreau*\QuadElarD},{-\ValeurCarreau*\LLL}) ; }
+			%\draw[xstep={\ValeurCarreau*\QuadNbCol},ystep=0.9,thin,\QuadCoulA] ({-\ValeurCarreau*\QuadElarG},0) grid ({\ValeurCarreau*\QuadNbCol+\ValeurCarreau*\QuadElarD},{-\ValeurCarreau*\QuadNbLig}) ;%grille college
+			\ifboolKV[Quadril]{DispBar}
+					{
+						\draw[thick,\QuadCoulB] ({\ValeurCarreau*\useKV[Quadril]{Margin}},0) -- ({\ValeurCarreau*\useKV[Quadril]{Margin}},{-\ValeurCarreau*\QuadNbLig}) ;%barre college
+					}{}
+		}%
+		{}%
+		\ifboolKV[Quadril]{Border}%cadre pour la "marge"
+			{\draw[thick] (0,0) rectangle ({\ValeurCarreau*\QuadNbCol},{-\ValeurCarreau*\QuadNbLig}) ;}%
+			{}%
+	\end{tikzpicture}%
+}%
 
 \NewDocumentEnvironment{EnvGrid}{ O{} D<>{lightgray!50/lightgray!25} }%créer le quadrillage
 {%
@@ -146,7 +263,10 @@
 			{%
 				\draw[xstep=0.8,ystep=0.2,thin,\QuadCoulB] ({-\ValeurCarreau*\QuadElarG},0) grid ({\ValeurCarreau*\QuadNbCol+\ValeurCarreau*\QuadElarD},{-\ValeurCarreau*\QuadNbLig}) ;%grille seyes
 				\draw[xstep=0.8,ystep=0.8,\QuadCoulA] ({-\ValeurCarreau*\QuadElarG},0) grid ({\ValeurCarreau*\QuadNbCol+\ValeurCarreau*\QuadElarD},{-\ValeurCarreau*\QuadNbLig}) ;%grille seyes
-				\draw[thick,\QuadCoulSeyes] ({\ValeurCarreau*\useKV[Quadril]{Margin}},0) -- ({\ValeurCarreau*\useKV[Quadril]{Margin}},{-\ValeurCarreau*\QuadNbLig}) ;%barre Seyes
+				\ifboolKV[Quadril]{DispBar}
+					{
+						\draw[thick,\QuadCoulSeyes] ({\ValeurCarreau*\useKV[Quadril]{Margin}},0) -- ({\ValeurCarreau*\useKV[Quadril]{Margin}},{-\ValeurCarreau*\QuadNbLig}) ;%barre Seyes
+					}{}
 			}%
 			{}%
 		\IfStrEq{\QuadType}{5x5}%
@@ -158,7 +278,10 @@
 		{%
 			\foreach \LLL in {0,1,...,\QuadNbLig} {\draw[,thin,\QuadCoulA] ({-\ValeurCarreau*\QuadElarG},{-\LLL*\ValeurCarreau}) -- ({\ValeurCarreau*\QuadNbCol+\ValeurCarreau*\QuadElarD},{-\ValeurCarreau*\LLL}) ; }
 			%\draw[xstep={\ValeurCarreau*\QuadNbCol},ystep=0.9,thin,\QuadCoulA] ({-\ValeurCarreau*\QuadElarG},0) grid ({\ValeurCarreau*\QuadNbCol+\ValeurCarreau*\QuadElarD},{-\ValeurCarreau*\QuadNbLig}) ;%grille college
-			\draw[thick,\QuadCoulB] ({\ValeurCarreau*\useKV[Quadril]{Margin}},0) -- ({\ValeurCarreau*\useKV[Quadril]{Margin}},{-\ValeurCarreau*\QuadNbLig}) ;%barre college
+			\ifboolKV[Quadril]{DispBar}
+					{
+						\draw[thick,\QuadCoulB] ({\ValeurCarreau*\useKV[Quadril]{Margin}},0) -- ({\ValeurCarreau*\useKV[Quadril]{Margin}},{-\ValeurCarreau*\QuadNbLig}) ;%barre college
+					}{}
 		}%
 		{}%
 		\ifboolKV[Quadril]{Border}%cadre pour la "marge"
