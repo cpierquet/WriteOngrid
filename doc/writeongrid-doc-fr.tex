@@ -48,8 +48,8 @@
 \setlength{\parindent}{0pt}
 \definecolor{LightGray}{gray}{0.9}
 
-\def\TPversion{0.1.3}
-\def\TPdate{18 Mars 2023}
+\def\TPversion{0.1.4}
+\def\TPdate{09 août 2023}
 
 \usepackage[most]{tcolorbox}
 \tcbuselibrary{minted}
@@ -180,12 +180,16 @@ Il est compatible avec les compilations usuelles en \textsf{latex}, \textsf{pdfl
 
 \medskip
 
+Pour des soucis de compatibilité, \texttt{xcolor} n'est pas chargé avec des options spécifiques, les couleurs utiles ont été définies directement dans le package.
+
+\medskip
+
 Il charge les packages et librairies suivantes :
 
 \begin{itemize}
-	\item \texttt{xcolor} avec les options \Cle{table,svgnames} ;
+	%\item \texttt{xcolor} avec les options \Cle{table,svgnames} ;
 	\item \texttt{tikz} avec les librairies \Cle{calc} et \Cle{positionning} ;
-	\item \texttt{xstring}, \texttt{xparse} et  \texttt{simplekv}.
+	\item \texttt{xstring} et \texttt{simplekv}.
 \end{itemize}
 
 \subsection{\og Philosophie \fg{} du package}
@@ -214,7 +218,7 @@ Ci-dessous on représente une grille $5\times5$ :
 	\item de taille 24x5 ;
 	\item avec un élargissement de \textcolor{red}{2 carreaux à gauche} et \textcolor{blue}{3 carreaux à droite} ;
 	\item en commençant à écrire au niveau du \textcolor{orange}{1\up{er} carreau} ;
-	\item un \textcolor{ForestGreen}{\textit{cadre}} est rajouté pour visualiser la grille \textit{de base}.
+	\item un \textcolor{green!50!black}{\textit{cadre}} est rajouté pour visualiser la grille \textit{de base}.
 \end{itemize}
 
 \medskip
@@ -227,16 +231,18 @@ Ci-dessous on représente une grille $5\times5$ :
 	\draw[blue,thick,decorate,decoration={brace,amplitude=8pt,mirror}] ({0.5*24},{-0.5*5-0.25})--({0.5*24+3*0.5},{-0.5*5-0.25}) node[midway,below=8pt,font=\small\sffamily] {3C} ;
 	\draw[thick,decorate,decoration={brace,amplitude=8pt}] ({0.5*24+3*0.5+0.25},0)--({0.5*24+3*0.5+0.25},{-0.5*5}) node[midway,right=8pt,font=\small\sffamily] {5C} ;
 	\draw[very thick,orange,densely dashed] ({0.5*1},0)--({0.5*1},{-0.5*5}) ;
-	\draw[ForestGreen,thick] (0,0) rectangle ({0.5*24},{-0.5*5}) ;
+	\draw[green!50!black,thick] (0,0) rectangle ({0.5*24},{-0.5*5}) ;
 \end{tikzpicture}
 
 \vspace{1.5cm}
 
-Il est à noter que le figure \texttt{tikzpicture} est \textit{délimitée} par le \textcolor{ForestGreen}{\textit{cadre}}, afin de pouvoir gérer les débordements et l'alignement de l'environnement !
+Il est à noter que le figure \texttt{tikzpicture} est \textit{délimitée} par le \textcolor{green!50!black}{\textit{cadre}}, afin de pouvoir gérer les débordements et l'alignement de l'environnement !
 
 \smallskip
 
-De plus, le bord gauche du \textcolor{ForestGreen}{\textit{cadre}} est aligné sur la marge gauche de la page, donc la position du quadrillage dépend en partie de la configuration de \texttt{\textbackslash parindent}.
+De plus, le bord gauche du \textcolor{green!50!black}{\textit{cadre}} est aligné sur la marge gauche de la page, donc la position du quadrillage dépend en partie de la configuration de \texttt{\textbackslash parindent}.
+
+\pagebreak
 
 \subsection{Couleurs prédéfinies}
 
@@ -244,11 +250,23 @@ Le package \textsf{WriteOnGrid} définit également des couleurs pour une saisie
 
 \begin{PresentationCode}{listing only}
 \definecolor{TyrianPurple}{rgb}{0.4,0.01,0.24}
+\definecolor{PapierRose}{HTML}{E6B8E6}
+\definecolor{PapierGris}{HTML}{D7E2EE}
 %Couleurs adaptées pour le Seyes
-\def\CoulSeyes{Plum!75/LightSteelBlue!50}
+\def\CoulSeyes{PapierRose/PapierGris}
 %Couleurs adaptées pour le Ruled
-\def\CoulRuled{LightSteelBlue!50/TyrianPurple}
+\def\CoulRuled{PapierGris/TyrianPurple}
 \end{PresentationCode}
+
+\begin{PresentationCode}{text only}
+{\tikz \filldraw[TyrianPurple] (0,0) rectangle++ (6,1) node[midway,font=\bfseries\large,text=white] {\verb+TyrianPurple+};}
+
+{\tikz \filldraw[PapierRose] (0,0) rectangle++ (6,1) node[midway,font=\bfseries\large,text=black] {\verb+PapierRose+};}
+
+{\tikz \filldraw[PapierGris] (0,0) rectangle++ (6,1) node[midway,font=\bfseries\large,text=black] {\verb+PapierGris+};}
+\end{PresentationCode}
+
+
 
 \pagebreak
 
@@ -290,8 +308,8 @@ Le second argument, \textit{optionnel}, entre \texttt{<...>} correspond quant à
 %18x4 grands carreaux, sans dépassement, couleurs adaptées, sans marge/barre
 \AffQuadrillage[NbCarreaux=18x4,Grille=Seyes,AffBarre=false]<\CoulSeyes>
 
-%36x8 petits carreaux, avec débordements 3/3, couleur LightSteelBlue!50
-\AffQuadrillage[NbCarreaux=36x8,Elargir=3/3]<LightSteelBlue!50>
+%36x8 petits carreaux, avec débordements 3/3, couleur PapierGris
+\AffQuadrillage[NbCarreaux=36x8,Elargir=3/3]<PapierGris>
 
 %12x3 lignes "Ruled", sans débordements, couleur Ruled, centré, avec marge
 \begin{center}
@@ -305,7 +323,7 @@ Le second argument, \textit{optionnel}, entre \texttt{<...>} correspond quant à
 
 \medskip
 
-\AffQuadrillage[NbCarreaux=36x8,Elargir=3/3]<LightSteelBlue!50>
+\AffQuadrillage[NbCarreaux=36x8,Elargir=3/3]<PapierGris>
 
 \begin{center}
 	\AffQuadrillage[NbCarreaux=12x3,Elargir=2/2,Grille=Ruled,Marge=2]<\CoulRuled>
@@ -352,8 +370,8 @@ Le second argument, \textit{optionnel}, entre \texttt{<...>} correspond quant à
 \begin{EnvQuadrillage}[NbCarreaux=18x4,Grille=Seyes,Marge=3]<\CoulSeyes>
 \end{EnvQuadrillage}
 
-%36x8 petits carreaux, avec débordements 3/3, couleur LightSteelBlue!50
-\begin{EnvQuadrillage}[NbCarreaux=36x8,Elargir=3/3]<LightSteelBlue!50>
+%36x8 petits carreaux, avec débordements 3/3, couleur PapierGris
+\begin{EnvQuadrillage}[NbCarreaux=36x8,Elargir=3/3]<PapierGris>
 \end{EnvQuadrillage}
 
 %12x3 lignes "Ruled", sans débordements, couleur Ruled, centré, avec marge
@@ -370,7 +388,7 @@ Le second argument, \textit{optionnel}, entre \texttt{<...>} correspond quant à
 
 \smallskip
 
-\begin{EnvQuadrillage}[NbCarreaux=36x8,Elargir=3/3,Cadre]<LightSteelBlue!50>
+\begin{EnvQuadrillage}[NbCarreaux=36x8,Elargir=3/3,Cadre]<PapierGris>
 \end{EnvQuadrillage}
 
 \begin{center}
@@ -407,7 +425,7 @@ Le premier argument, entre \texttt{[...]} propose les \Cle{clés} :
 	\item \Cle{Echelle} pour spécifier l'échelle du texte à écrire.\hfill~défaut : \Cle{1}
 \end{itemize}
 
-Le deuxième argument, \textit{optionnel}, entre \texttt{<...>} permet de spécifier l'alignement horizontal (parmi \Cle{left/center/right}) du texte dans le \textcolor{ForestGreen}{\textit{cadre}} de base, \Cle{left} par défaut.
+Le deuxième argument, \textit{optionnel}, entre \texttt{<...>} permet de spécifier l'alignement horizontal (parmi \Cle{left/center/right}) du texte dans le \textcolor{green!50!black}{\textit{cadre}} de base, \Cle{left} par défaut.
 
 \medskip
 
@@ -484,8 +502,8 @@ Tout le placement est géré grâce à un point (fictif), nommé \texttt{(SeyesO
 Pour l'environnement de création de la grille, l'argument, \textit{optionnel} et entre \texttt{[...]}, propose :
 
 \begin{itemize}
-	\item la clé \Cle{CouleurP} pour la couleur des \textit{gros traits} ;\hfill~défaut : \Cle{Plum!66}
-	\item la clé \Cle{CouleurS} pour la couleur des \textit{petits traits} ;\hfill~défaut : \Cle{LightSteelBlue!33}
+	\item la clé \Cle{CouleurP} pour la couleur des \textit{gros traits} ;\hfill~défaut : \Cle{PapierRose}
+	\item la clé \Cle{CouleurS} pour la couleur des \textit{petits traits} ;\hfill~défaut : \Cle{PapierGris}
 	\item la clé \Cle{CouleurMarge} pour la couleur du trait de la marge ;\hfill~défaut : \Cle{red!75}
 	\item le booléen \Cle{NumLignes} pour afficher le numéro des lignes (pour aider !). \hfill~défaut : \Cle{false}
 \end{itemize}
@@ -539,7 +557,7 @@ La commande \texttt{ParagraphePapierSeyes} permet de saisir des commandes \texti
 \ParagraphePapierSeyes[options]<alignement>(ajustement){texte}
 \end{PresentationCode}
 
-\faBomb{} Cet aspect \textit{multilignes} pourra sans doute être problématique pour un placement optimal, donc doit être utilisée avec précautions\ldots
+\faBomb{} Cet aspect \textit{multilignes} pourra sans doute être problématique pour un placement optimal, donc doit être utilisé avec précautions\ldots
 
 \smallskip
 
@@ -577,7 +595,7 @@ Un exemple \textit{détaillé}, avec le rendu en page suivante, avec quelques co
 	%cadre de notes
 	\CadreNoteSeyes{3}
 	%ligne pour un petit titre
-	\LignePapierSeyes[Echelle=1.5,Ligne=9,Couleur=ForestGreen]{\sffamily\underline{Exercice 1 :}}
+	\LignePapierSeyes[Echelle=1.5,Ligne=9,Couleur=green!50!black]{\sffamily\underline{Exercice 1 :}}
 	%un paragraphe de quelques lignes
 	\ParagraphePapierSeyes[Ligne=10]{\cursive\lipsum[1]}
 	%un paragraphe avec des maths
@@ -617,7 +635,7 @@ Un exemple \textit{détaillé}, avec le rendu en page suivante, avec quelques co
 	%cadre de notes
 	\CadreNoteSeyes{3}
 	%ligne pour un petit titre
-	\LignePapierSeyes[Echelle=1.5,Ligne=9,Couleur=ForestGreen]{\sffamily\underline{Exercice 1 :}}
+	\LignePapierSeyes[Echelle=1.5,Ligne=9,Couleur=green!50!black]{\sffamily\underline{Exercice 1 :}}
 	%un paragraphe de quelques lignes
 	\ParagraphePapierSeyes[Ligne=10]{\cursive\lipsum[1]}
 	%un paragraphe avec des maths
@@ -687,7 +705,7 @@ Les exemples des pages suivantes ont été obtenus de la même manière que celu
 	\LignePapierCinqCinq[Echelle=1.25,Ligne=1]{C. PIERQUET \hfill LaTeX}
 	\LignePapierCinqCinq[Echelle=1.25,Ligne=3,Couleur=red]<center>{\underline{\cursive\bfseries Devoir 2}}
 	\CadreNoteCinqCinq{4}
-	\LignePapierCinqCinq[Echelle=1.25,Ligne=9,Couleur=ForestGreen]{\sffamily\underline{Exercice 1 :}}
+	\LignePapierCinqCinq[Echelle=1.25,Ligne=9,Couleur=green!50!black]{\sffamily\underline{Exercice 1 :}}
 	\ParagraphePapierCinqCinq[Ligne=11]{\cursive\lipsum[1]}
 	\ParagraphePapierCinqCinq[Ligne=30]
 	{%
@@ -704,7 +722,7 @@ Les exemples des pages suivantes ont été obtenus de la même manière que celu
 	\LignePapierRuled[Echelle=1.25,Ligne=1]{C. PIERQUET \hfill LaTeX}
 	\LignePapierRuled[Echelle=1.25,Ligne=2,Couleur=red]<center>{\underline{\cursive\bfseries Devoir 3}}
 	\CadreNoteRuled{3}
-	\LignePapierRuled[Echelle=1.25,Ligne=8,Couleur=ForestGreen]{\sffamily\underline{Exercice 1 :}}
+	\LignePapierRuled[Echelle=1.25,Ligne=8,Couleur=green!50!black]{\sffamily\underline{Exercice 1 :}}
 	\ParagraphePapierRuled[Ligne=9]{\cursive\lipsum[1]}
 	\ParagraphePapierRuled[Ligne=22]
 	{%
@@ -722,7 +740,7 @@ Les exemples des pages suivantes ont été obtenus de la même manière que celu
 	\LignePapierCinqCinq[Echelle=1.25,Ligne=1]{C. PIERQUET \hfill LaTeX}
 	\LignePapierCinqCinq[Echelle=1.25,Ligne=3,Couleur=red]<center>{\underline{\cursive\bfseries Devoir 2}}
 	\CadreNoteCinqCinq{4}
-	\LignePapierCinqCinq[Echelle=1.25,Ligne=9,Couleur=ForestGreen]{\sffamily\underline{Exercice 1 :}}
+	\LignePapierCinqCinq[Echelle=1.25,Ligne=9,Couleur=green!50!black]{\sffamily\underline{Exercice 1 :}}
 	\ParagraphePapierCinqCinq[Ligne=11]{\cursive\lipsum[1]}
 	\ParagraphePapierCinqCinq[Ligne=30]
 	{%
@@ -739,7 +757,7 @@ Les exemples des pages suivantes ont été obtenus de la même manière que celu
 	\LignePapierRuled[Echelle=1.25,Ligne=1]{C. PIERQUET \hfill LaTeX}
 	\LignePapierRuled[Echelle=1.25,Ligne=2,Couleur=red]<center>{\underline{\cursive\bfseries Devoir 3}}
 	\CadreNoteRuled{3}
-	\LignePapierRuled[Echelle=1.25,Ligne=8,Couleur=ForestGreen]{\sffamily\underline{Exercice 1 :}}
+	\LignePapierRuled[Echelle=1.25,Ligne=8,Couleur=green!50!black]{\sffamily\underline{Exercice 1 :}}
 	\ParagraphePapierRuled[Ligne=9]{\cursive\lipsum[1]}
 	\ParagraphePapierRuled[Ligne=22]
 	{%
@@ -751,6 +769,8 @@ Les exemples des pages suivantes ont été obtenus de la même manière que celu
 \pagebreak
 
 \section{Historique}
+
+\verb|v0.1.4|~:~~~~Modification de la gestion des couleurs (\texttt{xcolor} n'est plus chargé avec \textsf{[table,svgnames]})
 
 \verb|v0.1.3|~:~~~~Ajout d'une commande pour afficher (sans écrire dessus) une grille
 

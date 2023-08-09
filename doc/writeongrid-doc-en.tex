@@ -45,8 +45,8 @@
 \setlength{\parindent}{0pt}
 \definecolor{LightGray}{gray}{0.9}
 
-\def\TPversion{0.1.3}
-\def\TPdate{18/03/2023}
+\def\TPversion{0.1.4}
+\def\TPdate{09/08/2023}
 
 \usepackage[most]{tcolorbox}
 \tcbuselibrary{minted}
@@ -168,10 +168,14 @@ It’s mostly compatible with \textsf{latex}, \textsf{pdflatex}, \textsf{lualate
 
 \medskip
 
+For a better compatibility, \texttt{xcolor} isn't charged anymore with options, so the usefull colors are directly defined within the package.
+
+\medskip
+
 It loads the following packages and libraries :
 
 \begin{itemize}
-	\item \texttt{xcolor} with options \Cle{table,svgnames} ;
+	%\item \texttt{xcolor} with options \Cle{table,svgnames} ;
 	\item \texttt{tikz} with the librairies \Cle{calc} and \Cle{positionning} ;
 	\item \texttt{xstring}, \texttt{xparse} and \texttt{simplekv}.
 \end{itemize}
@@ -202,7 +206,7 @@ For example, a $5\times5$ grid :
 	\item with a size 24x5 squares ;
 	\item with an overtaking by \textcolor{red}{2 squares at the left} and \textcolor{blue}{3 squares at the right} ;
 	\item with a global margin of \textcolor{orange}{1 square} ;
-	\item with a \textcolor{ForestGreen}{\textit{border}} to show the \textit{basis} grid.
+	\item with a \textcolor{green!50!black}{\textit{border}} to show the \textit{basis} grid.
 \end{itemize}
 
 \medskip
@@ -215,16 +219,16 @@ For example, a $5\times5$ grid :
 	\draw[blue,thick,decorate,decoration={brace,amplitude=8pt,mirror}] ({0.5*24},{-0.5*5-0.25})--({0.5*24+3*0.5},{-0.5*5-0.25}) node[midway,below=8pt,font=\small\sffamily] {3C} ;
 	\draw[thick,decorate,decoration={brace,amplitude=8pt}] ({0.5*24+3*0.5+0.25},0)--({0.5*24+3*0.5+0.25},{-0.5*5}) node[midway,right=8pt,font=\small\sffamily] {5C} ;
 	\draw[very thick,orange,densely dashed] ({0.5*1},0)--({0.5*1},{-0.5*5}) ;
-	\draw[ForestGreen,thick] (0,0) rectangle ({0.5*24},{-0.5*5}) ;
+	\draw[green!50!black,thick] (0,0) rectangle ({0.5*24},{-0.5*5}) ;
 \end{tikzpicture}
 
 \vspace{1.25cm}
 
-The \texttt{tikzpicture} is \textit{bounded} by the \textcolor{ForestGreen}{\textit{border}}, in order to specify overtakings or alignment.
+The \texttt{tikzpicture} is \textit{bounded} by the \textcolor{green!50!black}{\textit{border}}, in order to specify overtakings or alignment.
 
 \smallskip
 
-Le left-border of the \textcolor{ForestGreen}{\textit{border}} is aligned on the left-margin of the page, so take care of the \texttt{\textbackslash parindent}.
+Le left-border of the \textcolor{green!50!black}{\textit{border}} is aligned on the left-margin of the page, so take care of the \texttt{\textbackslash parindent}.
 
 \subsection{Predefined colors}
 
@@ -232,10 +236,20 @@ The package \textsf{WriteOnGrid} proposes "shortcuts" for classic colors !
 
 \begin{PresentationCode}{listing only}
 \definecolor{TyrianPurple}{rgb}{0.4,0.01,0.24}
+\definecolor{PapierRose}{HTML}{E6B8E6}
+\definecolor{PapierGris}{HTML}{D7E2EE}
 %Colors for Seyes
-\def\ColSeyes{Plum!75/LightSteelBlue!50}
+\def\ColSeyes{PapierRose/PapierGris}
 %Colors for Ruled
-\def\ColRuled{LightSteelBlue!50/TyrianPurple}
+\def\ColRuled{PapierGris/TyrianPurple}
+\end{PresentationCode}
+
+\begin{PresentationCode}{text only}
+{\tikz \filldraw[TyrianPurple] (0,0) rectangle++ (6,1) node[midway,font=\bfseries\large,text=white] {\verb+TyrianPurple+};}
+
+{\tikz \filldraw[PapierRose] (0,0) rectangle++ (6,1) node[midway,font=\bfseries\large,text=black] {\verb+PapierRose+};}
+
+{\tikz \filldraw[PapierGris] (0,0) rectangle++ (6,1) node[midway,font=\bfseries\large,text=black] {\verb+PapierGris+};}
 \end{PresentationCode}
 
 \pagebreak
@@ -275,8 +289,8 @@ The second argument, \textit{optional}, between \texttt{<...>} is the color(s) o
 %18x4 big squares, w/o overtaking, Seyes colors, w/o margin/bar
 \DispGrid[NumSquares=18x4,Grid=Seyes,DispBar=false]<\ColSeyes>
 
-%36x8 small squares, overtakings 3/3, LightSteelBlue color
-\DispGrid[NumSquares=36x8,Enlarge=3/3]<LightSteelBlue>
+%36x8 small squares, overtakings 3/3, PapierGris color
+\DispGrid[NumSquares=36x8,Enlarge=3/3]<PapierGris>
 
 %12x3 lines "Ruled", w/o overtakins, Ruled colors, centered, with 2-margin
 \begin{center}
@@ -290,7 +304,7 @@ The second argument, \textit{optional}, between \texttt{<...>} is the color(s) o
 
 \medskip
 
-\DispGrid[NumSquares=36x8,Enlarge=3/3]<LightSteelBlue>
+\DispGrid[NumSquares=36x8,Enlarge=3/3]<PapierGris>
 
 \smallskip
 
@@ -336,8 +350,8 @@ The second argument, \textit{optional}, between \texttt{<...>} is the color(s) o
 \begin{EnvGrid}[NumSquares=18x4,Grid=Seyes,Margin=3]<\ColSeyes>
 \end{EnvGrid}
 
-%36x8 small squares, overtakings 3/3, LightSteelBlue color
-\begin{EnvGrid}[NumSquares=36x8,Enlarge=3/3]<LightSteelBlue>
+%36x8 small squares, overtakings 3/3, PapierGris color
+\begin{EnvGrid}[NumSquares=36x8,Enlarge=3/3]<PapierGris>
 \end{EnvGrid}
 
 %12x3 lines "Ruled", w/o overtakins, Ruled colors, centered, with 2-margin
@@ -354,7 +368,7 @@ The second argument, \textit{optional}, between \texttt{<...>} is the color(s) o
 
 \smallskip
 
-\begin{EnvGrid}[NumSquares=36x8,Enlarge=3/3]<LightSteelBlue>
+\begin{EnvGrid}[NumSquares=36x8,Enlarge=3/3]<PapierGris>
 \end{EnvGrid}
 
 \smallskip
@@ -393,7 +407,7 @@ The fisrt argument, \textit{optional}, between \texttt{[...]} give the \Cle{keys
 	\item \Cle{Scale} to specify the scale of the given text.\hfill~default : \Cle{1}
 \end{itemize}
 
-the second argument, \textit{optional}, between \texttt{<...>} is the horizontal alignment (\Cle{left/center/right}) of the text in the basis \textcolor{ForestGreen}{\textit{border}}, \Cle{left} by default.
+the second argument, \textit{optional}, between \texttt{<...>} is the horizontal alignment (\Cle{left/center/right}) of the text in the basis \textcolor{green!50!black}{\textit{border}}, \Cle{left} by default.
 
 \medskip
 
@@ -454,7 +468,7 @@ To sum up, they create full paper grid (by preference for \texttt{\textbf{a4pape
 	\LignePapierRuled[Echelle=1.25,Ligne=1]{C. PIERQUET \hfill LaTeX}
 	\LignePapierRuled[Echelle=1.25,Ligne=2,Couleur=red]<center>{\underline{\cursive\bfseries Evaluation 3}}
 	\CadreNoteRuled{3}
-	\LignePapierRuled[Echelle=1.25,Ligne=8,Couleur=ForestGreen]{\sffamily\underline{Exercise 1 :}}
+	\LignePapierRuled[Echelle=1.25,Ligne=8,Couleur=green!50!black]{\sffamily\underline{Exercise 1 :}}
 	\ParagraphePapierRuled[Ligne=9]{\cursive\lipsum[1]}
 	\ParagraphePapierRuled[Ligne=22]
 	{%
@@ -473,7 +487,7 @@ To sum up, they create full paper grid (by preference for \texttt{\textbf{a4pape
 	\LignePapierRuled[Echelle=1.25,Ligne=1]{C. PIERQUET \hfill LaTeX}
 	\LignePapierRuled[Echelle=1.25,Ligne=2,Couleur=red]<center>{\underline{\cursive\bfseries Evaluation 3}}
 	\CadreNoteRuled{3}
-	\LignePapierRuled[Echelle=1.25,Ligne=8,Couleur=ForestGreen]{\sffamily\underline{Exercise 1 :}}
+	\LignePapierRuled[Echelle=1.25,Ligne=8,Couleur=green!50!black]{\sffamily\underline{Exercise 1 :}}
 	\ParagraphePapierRuled[Ligne=9]{\cursive\lipsum[1]}
 	\ParagraphePapierRuled[Ligne=22]
 	{%
@@ -485,8 +499,9 @@ To sum up, they create full paper grid (by preference for \texttt{\textbf{a4pape
 
 \pagebreak
 
-
 \part*{History}
+
+\verb|v0.1.4|~:~~~~\texttt{xcolor} isn't loadeed with \textsf{[table,svgnames]})
 
 \verb|v0.1.3|~:~~~~Command to display a grid (w/o writing on it)
 
