@@ -48,8 +48,8 @@
 \setlength{\parindent}{0pt}
 \definecolor{LightGray}{gray}{0.9}
 
-\def\TPversion{0.1.5}
-\def\TPdate{15 novembre 2023}
+\def\TPversion{0.1.6}
+\def\TPdate{12 avril 2024}
 
 \usepackage[most]{tcolorbox}
 \tcbuselibrary{minted}
@@ -266,7 +266,29 @@ Le package \textsf{WriteOnGrid} définit également des couleurs pour une saisie
 {\tikz \filldraw[PapierGris] (0,0) rectangle++ (6,1) node[midway,font=\bfseries\large,text=black] {\verb+PapierGris+};}
 \end{PresentationCode}
 
+\subsection{Le nombre de carreaux}
 
+Le nombre de carreaux de la grille (pour les quadrillages individuelles et les environnements) peuvent être donnés de plusieurs manières :
+
+\begin{itemize}
+	\item \Cle{NbCarreaux=<nbcols>x<nblignes>} pour spécifier manuellement ;
+	\item \Cle{NbCarreaux=Auto} pour remplir le reste de la page (horiz. et vert.) ;
+	\item \Cle{NbCarreaux=Cx<nblignes} pour remplir horizontalement et spécifier le nombre de lignes ;
+	\item \Cle{NbCarreaux=<nbcols>xL} pour remplir verticalement et spécifier le nombre de colonnes.
+\end{itemize}
+
+À noter que les calculs effectués pour déterminer la \textit{place} restante ne tiennent pas compte des éventuels ressorts élastiques que \LaTeX\ peut rajouter pour \textit{optimiser} la place.
+
+\smallskip
+
+Pour \textit{forcer} l'ajout de ligne(s) supplémentaire(s), il est possible d'utiliser :
+
+\begin{itemize}
+	\item \Cle{NbCarreaux=Auto*} pour forcer l'ajout d'une ligne en plus ;
+	\item \Cle{NbCarreaux=Auto**} pour forcer l'ajout de deux lignes en plus ;
+	\item \Cle{NbCarreaux=Auto***} pour forcer l'ajout de trois lignes en plus ;
+	\item etc
+\end{itemize}
 
 \pagebreak
 
@@ -587,6 +609,14 @@ Le dernier argument, \textit{obligatoire} et entre \texttt{\{...\}} est le parag
 Un exemple \textit{détaillé}, avec le rendu en page suivante, avec quelques commentaires pour expliquer.
 
 \begin{PresentationCode}{listing only}
+\documentclass[a4paper,11pt]{article}
+\usepackage{WriteOnGrid}
+\usepackage{amsmath,amssymb}
+\usepackage{frcursive}
+\usepackage{lipsum}
+
+\begin{document}
+
 \pagestyle{empty}
 
 \begin{PleinePageSeyes}[NumLignes]%numéro de lignes pour mieux "lire"
@@ -601,18 +631,16 @@ Un exemple \textit{détaillé}, avec le rendu en page suivante, avec quelques co
 	%un paragraphe de quelques lignes
 	\ParagraphePapierSeyes[Ligne=10]{\cursive\lipsum[1]}
 	%un paragraphe avec des maths
-	\ParagraphePapierSeyes[Ligne=22]
-	{%
+	\ParagraphePapierSeyes[Ligne=22]{%
 		On essaye avec des maths $1+\frac12=\frac32$ en mode ligne avec des lignes assez longues pour voir
 		ce que ça peut donner\ldots Et une intégrale $\int_0^1 2x dx = 1$.\\On essaye en passant à la ligne !!!
-	}
+		}
 	%une ligne avec des maths
 	\LignePapierSeyes[Ligne=25]<center>{${\displaystyle\sum_{i=1}^{n} i=\displaystyle\frac{n(n+1)}{2}}$.}
 	
 	%un environnement, avec ajustement manuel via (x,y)...
 	%pas fonctionnel à 100%
-	\LignePapierSeyes[Echelle=1.1,Ligne=27](-1.4,0.95)
-	{
+	\LignePapierSeyes[Echelle=1.1,Ligne=27](-1.4,0.95){
 		\begin{align*}
 			\frac{d}{dx} \ln x &= \lim_{h\to 0} \frac{\ln(x+h) - \ln x}{h} \\
 			&= \ln e^{1/x} &&\text{How this follows is left as an exercise.}\\
@@ -620,9 +648,10 @@ Un exemple \textit{détaillé}, avec le rendu en page suivante, avec quelques co
 		\end{align*}
 	}
 	%un paragraphe multiligne, avec police agrandie
-	\ParagraphePapierSeyes[Echelle=1.15,Ligne=30]
-		{BlablablaBlablabla.\\BlablablaBlablablaBlablablaBlablabla.}
+	\ParagraphePapierSeyes[Echelle=1.15,Ligne=30]{BlablablaBlablabla.\\BlablablaBlablablaBlablablaBlablabla.}
 \end{PleinePageSeyes}
+
+\end{document}
 \end{PresentationCode}
 
 \newpage
@@ -812,6 +841,8 @@ Les exemples des pages suivantes ont été obtenus de la même manière que celu
 \pagebreak
 
 \section{Historique}
+
+\verb|v0.1.6|~:~~~~Possibilité de déterminer automatiquement L\&C en fonction de la place restante.
 
 \verb|v0.1.5|~:~~~~Possibilité de spécifier la réglure pour les quadrillages de type \textsf{Seyes} + meilleure gestion des paragraphes.
 

@@ -45,8 +45,8 @@
 \setlength{\parindent}{0pt}
 \definecolor{LightGray}{gray}{0.9}
 
-\def\TPversion{0.1.5}
-\def\TPdate{15/11/2023}
+\def\TPversion{0.1.6}
+\def\TPdate{12/04/2024}
 
 \usepackage[most]{tcolorbox}
 \tcbuselibrary{minted}
@@ -251,6 +251,30 @@ The package \textsf{WriteOnGrid} proposes "shortcuts" for classic colors !
 
 {\tikz \filldraw[PapierGris] (0,0) rectangle++ (6,1) node[midway,font=\bfseries\large,text=black] {\verb+PapierGris+};}
 \end{PresentationCode}
+
+\subsection{The number of squares}
+
+The number of grid squares (for individual grids and environments) can be given in several ways:
+
+\begin{itemize}
+	\item \Cle{NumSquares=<nbcols>x<nblines>} to specify manually;
+	\item \Cle{NumSquares=Auto} to fill the rest of the page (horiz. and vert.);
+	\item \Cle{NumSquares=Cx<nblines} to fill horizontally and specify the number of lines;
+	\item \Cle{NumSquares=<nbcols>xL} to fill vertically and specify the number of columns.
+\end{itemize}
+
+Note that the calculations carried out to determine the remaining \textit{space} do not take into account any elastic springs that \LaTeX\ can add to \textit{optimize} the space.
+
+\smallskip
+
+To \textit{force} the addition of additional line(s), it is possible to use:
+
+\begin{itemize}
+	\item \Cle{NumSquares=Auto*} to force the addition of one more line;
+	\item \Cle{NumSquares=Auto**} to force the addition of two more lines;
+	\item \Cle{NumSquares=Auto***} to force the addition of three more lines;
+	\item etc.
+\end{itemize}
 
 \pagebreak
 
@@ -500,6 +524,8 @@ To sum up, they create full paper grid (by preference for \texttt{\textbf{a4pape
 \pagebreak
 
 \part*{History}
+
+\verb|v0.1.6|~:~~~~Possibility to automatically determine L\&C based on the remaining space.
 
 \verb|v0.1.4|~:~~~~New \texttt{[keys]} + enhancements for paragraphs, for french version (for the moment\dots)
 

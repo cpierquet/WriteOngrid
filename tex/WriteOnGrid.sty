@@ -2,7 +2,8 @@
 % licence                        : Released under the LaTeX Project Public License v1.3c or later, see http://www.latex-project.org/lppl.txtf
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{WriteOnGrid}[2023/11/15 v0.1.5 package to write on grid lines]
+\ProvidesPackage{WriteOnGrid}[2024/04/12 v0.1.6 package to write on grid lines]
+% 0.1.6		Commande pour calculer le nombre de lignes à insérer en fin de page / options Auto
 % 0.1.5		Choix de la réglure pour le seyes (en pretest) + amélioration de la gestion des paragraphes
 % 0.1.4		Suppression des options de xcolor (définition manuelle des couleurs)
 % 0.1.3		Ajout de commandes simples pour des mini-quadrillages autonomes, sans texte
@@ -19,6 +20,33 @@
 
 %------Variables
 \newcounter{lgquadri}%compteur des lignes, qui sera incrémenté
+
+%-----Calcul du nombre de lignes/colonnes
+\NewDocumentCommand\GridCalcNbCols{ O{\ColAuto} m }{%
+	\IfStrEqCase{#2}{%
+		{Seyes}{\xdef#1{\fpeval{trunc((\the\linewidth)/(22.762192pt),0)}}}%
+		{5x5}{\xdef#1{\fpeval{trunc((\the\linewidth)/(14.22637pt),0)}}}%
+		{Ruled}{\xdef#1{\fpeval{trunc((\the\linewidth)/(25.607466pt),0)}}}%
+	}[\xdef#1{\fpeval{trunc((\the\linewidth)/(22.762192pt),0)}}]%
+}
+
+\NewDocumentCommand\GridCalcNbLignes{ O{\LgnAuto} m }{%
+	\edef\measurepage{\dimexpr\pagegoal-\pagetotal\relax}
+	\IfStrEqCase{#2}{%
+		{Seyes}{\xdef#1{\fpeval{trunc((\the\measurepage)/(22.762192pt),0)}}}%
+		{5x5}{\xdef#1{\fpeval{trunc((\the\measurepage)/(14.22637pt),0)}}}%
+		{Ruled}{\xdef#1{\fpeval{trunc((\the\measurepage)/(25.607466pt),0)}}}%
+	}[\xdef#1{\fpeval{trunc((\the\measurepage)/(22.762192pt),0)}}]%
+}
+
+\NewDocumentCommand\GridCalcAuto{ O{\LgnAuto} O{\ColAuto} m }{%
+	\edef\measurepage{\dimexpr\pagegoal-\pagetotal\relax}
+	\IfStrEqCase{#3}{%
+		{Seyes}{\xdef#1{\fpeval{trunc((\the\measurepage)/(22.762192pt),0)}}\xdef#2{\fpeval{trunc((\the\linewidth)/(22.762192pt),0)}}}%
+		{5x5}{\xdef#1{\fpeval{trunc((\the\measurepage)/(14.22637pt),0)}}\xdef#2{\fpeval{trunc((\the\linewidth)/(14.22637pt),0)}}}%
+		{Ruled}{\xdef#1{\fpeval{trunc((\the\measurepage)/(25.607466pt),0)}}\xdef#2{\fpeval{trunc((\the\linewidth)/(25.607466pt),0)}}}%
+	}[\xdef#1{\fpeval{trunc((\the\measurepage)/(22.762192pt),0)}}\xdef#2{\fpeval{trunc((\the\linewidth)/(22.762192pt),0)}}]%
+}
 
 %-----Couleurs utiles
 \definecolor{TyrianPurple}{rgb}{0.4,0.01,0.24}
@@ -78,7 +106,35 @@
 	\IfSubStr{#2}{/}%on récupère les couleurs
 		{\StrCut{#2}{/}{\QuadCoulA}{\QuadCoulB}}
 		{\def\QuadCoulA{#2}\def\QuadCoulB{#2}}%
-	\StrCut{\QuadNbCar}{x}{\QuadNbCol}{\QuadNbLig}%
+	%détermination des nb de carreaux, sans unite... ? TEST !!!!!!
+	\IfSubStr{\QuadNbCar}{Auto}%
+		{%
+			\GridCalcAuto[\QuadNbLig][\QuadNbCol]{\QuadType}%
+			\IfSubStr{\QuadNbCar}{Auto*}%
+				{%
+					\StrCount{\QuadNbCar}{*}[\tmpnbetoiles]%
+					\xdef\QuadNbLig{\inteval{\QuadNbLig+\tmpnbetoiles}}%
+				}%
+				{}%
+		}%
+		{%
+			\IfBeginWith{\QuadNbCar}{C}%
+				{%
+					\GridCalcNbCols[\QuadNbCol]{\QuadType}%
+					\StrBehind{\QuadNbCar}{x}[\QuadNbLig]%
+				}%
+				{%
+					\IfEndWith{\QuadNbCar}{L}%
+						{%
+							\GridCalcNbLignes[\QuadNbLig]{\QuadType}%
+							\StrBefore{\QuadNbCar}{x}[\QuadNbCol]%
+						}%
+						{%
+							\StrCut{\QuadNbCar}{x}{\QuadNbCol}{\QuadNbLig}%
+						}%
+				}%
+		}%
+	%suite des calculs
 	\IfStrEq{\QuadType}{Seyes}%les types de quadrillages
 		{\xdef\ValeurCarreau{0.8}\xdef\CoeffUnite{\fpeval{(\QuadReglureSeyes)/2}}}%
 		{}%
@@ -88,7 +144,6 @@
 	\IfStrEq{\QuadType}{Ruled}%
 		{\xdef\ValeurCarreau{0.9}\xdef\CoeffUnite{1}}%
 		{}%
-		
 	\IfSubStr{\QuadElar}{/}%on récupère les élargissements G et D
 		{\StrCut{\QuadElar}{/}{\QuadElarG}{\QuadElarD}}%
 		{\def\QuadElarG{\QuadElar}\def\QuadElarD{\QuadElar}}%
@@ -133,7 +188,35 @@
 	\IfSubStr{#2}{/}%on récupère les couleurs
 		{\StrCut{#2}{/}{\QuadCoulA}{\QuadCoulB}}
 		{\def\QuadCoulA{#2}\def\QuadCoulB{#2}}%
-	\StrCut{\QuadNbCar}{x}{\QuadNbCol}{\QuadNbLig}%
+	%détermination des nb de carreaux, sans unite... ? TEST !!!!!!
+	\IfSubStr{\QuadNbCar}{Auto}%
+		{%
+			\GridCalcAuto[\QuadNbLig][\QuadNbCol]{\QuadType}%
+			\IfSubStr{\QuadNbCar}{Auto*}%
+				{%
+					\StrCount{\QuadNbCar}{*}[\tmpnbetoiles]%
+					\xdef\QuadNbLig{\inteval{\QuadNbLig+\tmpnbetoiles}}%
+				}%
+				{}%
+		}%
+		{%
+			\IfBeginWith{\QuadNbCar}{C}%
+				{%
+					\GridCalcNbCols[\QuadNbCol]{\QuadType}%
+					\StrBehind{\QuadNbCar}{x}[\QuadNbLig]%
+				}%
+				{%
+					\IfEndWith{\QuadNbCar}{L}%
+						{%
+							\GridCalcNbLignes[\QuadNbLig]{\QuadType}%
+							\StrBefore{\QuadNbCar}{x}[\QuadNbCol]%
+						}%
+						{%
+							\StrCut{\QuadNbCar}{x}{\QuadNbCol}{\QuadNbLig}%
+						}%
+				}%
+		}%
+	%suite des calculs
 	\IfStrEq{\QuadType}{Seyes}%les types de quadrillages
 		{\xdef\ValeurCarreau{0.8}\xdef\CoeffUnite{\fpeval{(\QuadReglureSeyes)/2}}}%
 		{}%
@@ -204,7 +287,35 @@
 	\IfSubStr{#2}{/}%on récupère les couleurs
 		{\StrCut{#2}{/}{\QuadCoulA}{\QuadCoulB}}
 		{\def\QuadCoulA{#2}\def\QuadCoulB{#2}}%
-	\StrCut{\QuadNbCar}{x}{\QuadNbCol}{\QuadNbLig}%
+	%détermination des nb de carreaux, sans unite... ? TEST !!!!!!
+	\IfSubStr{\QuadNbCar}{Auto}%
+		{%
+			\GridCalcAuto[\QuadNbLig][\QuadNbCol]{\QuadType}%
+			\IfSubStr{\QuadNbCar}{Auto*}%
+				{%
+					\StrCount{\QuadNbCar}{*}[\tmpnbetoiles]%
+					\xdef\QuadNbLig{\inteval{\QuadNbLig+\tmpnbetoiles}}%
+				}%
+				{}%
+		}%
+		{%
+			\IfBeginWith{\QuadNbCar}{C}%
+				{%
+					\GridCalcNbCols[\QuadNbCol]{\QuadType}%
+					\StrBehind{\QuadNbCar}{x}[\QuadNbLig]%
+				}%
+				{%
+					\IfEndWith{\QuadNbCar}{L}%
+						{%
+							\GridCalcNbLignes[\QuadNbLig]{\QuadType}%
+							\StrBefore{\QuadNbCar}{x}[\QuadNbCol]%
+						}%
+						{%
+							\StrCut{\QuadNbCar}{x}{\QuadNbCol}{\QuadNbLig}%
+						}%
+				}%
+		}%
+	%suite des calculs
 	\IfStrEq{\QuadType}{Seyes}%les types de quadrillages
 		{\xdef\ValeurCarreau{0.8}}%
 		{}%
@@ -258,7 +369,35 @@
 	\IfSubStr{#2}{/}%on récupère les couleurs
 		{\StrCut{#2}{/}{\QuadCoulA}{\QuadCoulB}}
 		{\def\QuadCoulA{#2}\def\QuadCoulB{#2}}%
-	\StrCut{\QuadNbCar}{x}{\QuadNbCol}{\QuadNbLig}%
+	%détermination des nb de carreaux, sans unite... ? TEST !!!!!!
+	\IfSubStr{\QuadNbCar}{Auto}%
+		{%
+			\GridCalcAuto[\QuadNbLig][\QuadNbCol]{\QuadType}%
+			\IfSubStr{\QuadNbCar}{Auto*}%
+				{%
+					\StrCount{\QuadNbCar}{*}[\tmpnbetoiles]%
+					\xdef\QuadNbLig{\inteval{\QuadNbLig+\tmpnbetoiles}}%
+				}%
+				{}%
+		}%
+		{%
+			\IfBeginWith{\QuadNbCar}{C}%
+				{%
+					\GridCalcNbCols[\QuadNbCol]{\QuadType}%
+					\StrBehind{\QuadNbCar}{x}[\QuadNbLig]%
+				}%
+				{%
+					\IfEndWith{\QuadNbCar}{L}%
+						{%
+							\GridCalcNbLignes[\QuadNbLig]{\QuadType}%
+							\StrBefore{\QuadNbCar}{x}[\QuadNbCol]%
+						}%
+						{%
+							\StrCut{\QuadNbCar}{x}{\QuadNbCol}{\QuadNbLig}%
+						}%
+				}%
+		}%
+	%suite des calculs
 	\IfStrEq{\QuadType}{Seyes}%les types de quadrillages
 		{\xdef\ValeurCarreau{0.8}}%
 		{}%
@@ -354,7 +493,7 @@
 			{%
 				\foreach \lig in {1,...,\inteval{\SeyesFullNbLignP+1}} {\node[gray,inner sep=0pt,anchor=base east] at ($(SeyesOrigine)+(-0.2,{-0.4*\SeyesFullReglureSeyes*(\lig-1)})$) {\scriptsize\sffamily\lig};}
 			}%
-			{}
+			{}%
 }
 {
 	\end{tikzpicture}%
