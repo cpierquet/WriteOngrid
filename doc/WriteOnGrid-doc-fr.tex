@@ -48,8 +48,8 @@
 \setlength{\parindent}{0pt}
 \definecolor{LightGray}{gray}{0.9}
 
-\def\TPversion{0.1.6}
-\def\TPdate{12 avril 2024}
+\def\TPversion{0.1.7}
+\def\TPdate{01 septembre 2024}
 
 \usepackage[most]{tcolorbox}
 \tcbuselibrary{minted}
@@ -763,6 +763,13 @@ Les commandes et environnements sont suffixées différemment, mais le reste est
 \end{PleinePageSeyes}
 \end{PresentationCode}
 
+{\small\faBomb} Pour les pages complètes 5x5, il est possible d'utiliser les clés \Cle{MargeG} et \Cle{MargeH} qui valent \Cle{auto} par défaut (adaptées au format du papier), mais elles peuvent être définies manuellement, avec les \textbf{contraintes} suivantes (pour un affichage correct sur les lignes, pour le moment\ldots) :
+
+\begin{itemize}
+	\item \Cle{MargeG} doit valoir $0.2$ ou $0.7$ ou $1.2$ ou $1.7$ etc
+	\item \Cle{MargeH} doit valoir $0.3$ ou $0.8$ ou $1.3$ ou $1.8$ etc
+\end{itemize}
+
 \subsection{Exemples}
 
 Les exemples des pages suivantes ont été obtenus de la même manière que celui de la pleine page Seyes, il \textit{suffit} d'adapter les commandes et environnements avec le bon suffixe.
@@ -770,7 +777,7 @@ Les exemples des pages suivantes ont été obtenus de la même manière que celu
 \begin{PresentationCode}{listing only}
 \pagestyle{empty}
 
-\begin{PleinePageCinqCinq}[NumLignes]
+\begin{PleinePageCinqCinq}[NumLignes,MargeG=2.7,MargeH=2.3]
 	\LignePapierCinqCinq[Echelle=1.25,Ligne=1]{C. PIERQUET \hfill LaTeX}
 	\LignePapierCinqCinq[Echelle=1.25,Ligne=3,Couleur=red]<center>{\underline{\cursive\bfseries Devoir 2}}
 	\CadreNoteCinqCinq{4}
@@ -807,7 +814,11 @@ Les exemples des pages suivantes ont été obtenus de la même manière que celu
 
 \pagestyle{empty}
 
-\begin{PleinePageCinqCinq}[NumLignes]
+\begin{PleinePageCinqCinq}[NumLignes,MargeG=2.7,MargeH=2.3]
+	%marges pour illustrer
+	\draw[thick,teal,<->,>=latex] ([shift={(-2.7,1.5)}]CinqCinqOrigine) --++ (2.7,0) node[midway,below,font=\small\ttfamily] {MargeG} ;
+	\draw[thick,orange,<->,>=latex] ([shift={(-0.5,0)}]CinqCinqOrigine) --++ (0,2.3) node[midway,right,font=\small\ttfamily] {MargeH} ;
+	%back to normal
 	\LignePapierCinqCinq[Echelle=1.25,Ligne=1]{C. PIERQUET \hfill LaTeX}
 	\LignePapierCinqCinq[Echelle=1.25,Ligne=3,Couleur=red]<center>{\underline{\cursive\bfseries Devoir 2}}
 	\CadreNoteCinqCinq{4}
@@ -841,6 +852,8 @@ Les exemples des pages suivantes ont été obtenus de la même manière que celu
 \pagebreak
 
 \section{Historique}
+
+\verb|v0.1.7|~:~~~~Option pour régler la marge pour les \textsf{PleinePageCinqCinq}
 
 \verb|v0.1.6|~:~~~~Possibilité de déterminer automatiquement L\&C en fonction de la place restante.
 
