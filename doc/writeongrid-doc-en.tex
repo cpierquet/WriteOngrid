@@ -45,9 +45,10 @@
 \setlength{\parindent}{0pt}
 \definecolor{LightGray}{gray}{0.9}
 
-\def\TPversion{0.1.4}
-\def\TPdate{09/08/2023}
+\def\TPversion{0.1.8}
+\def\TPdate{05/11/2024}
 
+\usepackage{minted2}
 \usepackage[most]{tcolorbox}
 \tcbuselibrary{minted}
 \NewTCBListing{PresentationCode}{ O{blue} m }{%
@@ -230,7 +231,7 @@ The \texttt{tikzpicture} is \textit{bounded} by the \textcolor{green!50!black}{\
 
 Le left-border of the \textcolor{green!50!black}{\textit{border}} is aligned on the left-margin of the page, so take care of the \texttt{\textbackslash parindent}.
 
-\subsection{Predefined colors}
+\subsection{Predefined colors and styles}
 
 The package \textsf{WriteOnGrid} proposes "shortcuts" for classic colors !
 
@@ -251,6 +252,40 @@ The package \textsf{WriteOnGrid} proposes "shortcuts" for classic colors !
 
 {\tikz \filldraw[PapierGris] (0,0) rectangle++ (6,1) node[midway,font=\bfseries\large,text=black] {\verb+PapierGris+};}
 \end{PresentationCode}
+
+Note that, since the latest version \texttt{0.1.8}, rules thicknesses can be globally redefined via \texttt{tikzset} (for printing purposes in particular).
+
+\begin{PresentationCode}{listing only}
+%grid
+\tikzset{WoGridp/.style={semithick}}    %0.6pt
+%secondary grid (if Seyes)
+\tikzset{WoGridp/.style={thin}}         %0.4pt
+%bar
+\tikzset{WoGridbar/.style={thick}}      %0.8pt
+\end{PresentationCode}
+\subsection{The number of squares}
+
+The number of grid squares (for individual grids and environments) can be given in several ways:
+
+\begin{itemize}
+	\item \Cle{NumSquares=<nbcols>x<nblines>} to specify manually;
+	\item \Cle{NumSquares=Auto} to fill the rest of the page (horiz. and vert.);
+	\item \Cle{NumSquares=Cx<nblines} to fill horizontally and specify the number of lines;
+	\item \Cle{NumSquares=<nbcols>xL} to fill vertically and specify the number of columns.
+\end{itemize}
+
+Note that the calculations carried out to determine the remaining \textit{space} do not take into account any elastic springs that \LaTeX\ can add to \textit{optimize} the space.
+
+\smallskip
+
+To \textit{force} the addition of additional line(s), it is possible to use:
+
+\begin{itemize}
+	\item \Cle{NumSquares=Auto*} to force the addition of one more line;
+	\item \Cle{NumSquares=Auto**} to force the addition of two more lines;
+	\item \Cle{NumSquares=Auto***} to force the addition of three more lines;
+	\item etc.
+\end{itemize}
 
 \pagebreak
 
@@ -279,8 +314,8 @@ The first argument, \textit{optional}, between \texttt{[...]} give the \Cle{keys
 The second argument, \textit{optional}, between \texttt{<...>} is the color(s) of the grid :
 
 \begin{itemize}
-	\item by \Cle{Color} (\Cle{lightgray!50} by default) for $5\times5$  ;
-	\item by \Cle{ColorA/ColorB} (\Cle{lightgray!50/lightgray!25} by default) for Seyes or Ruled.
+	\item by \Cle{Color} (\Cle{lightgray!66} by default) for $5\times5$  ;
+	\item by \Cle{ColorA/ColorB} (\Cle{lightgray!66/lightgray!33} by default) for Seyes or Ruled.
 \end{itemize}
 
 \medskip
@@ -339,8 +374,8 @@ The first argument, \textit{optional}, between \texttt{[...]} give the \Cle{keys
 The second argument, \textit{optional}, between \texttt{<...>} is the color(s) of the grid :
 
 \begin{itemize}
-	\item by \Cle{Color} (\Cle{lightgray!50} by default) for $5\times5$  ;
-	\item by \Cle{ColorA/ColorB} (\Cle{lightgray!50/lightgray!25} by default) for Seyes or Ruled.
+	\item by \Cle{Color} (\Cle{lightgray!66} by default) for $5\times5$  ;
+	\item by \Cle{ColorA/ColorB} (\Cle{lightgray!66/lightgray!33} by default) for Seyes or Ruled.
 \end{itemize}
 
 \medskip
@@ -501,7 +536,15 @@ To sum up, they create full paper grid (by preference for \texttt{\textbf{a4pape
 
 \part*{History}
 
-\verb|v0.1.4|~:~~~~\texttt{xcolor} isn't loadeed with \textsf{[table,svgnames]})
+\verb|v0.1.8|~:~~~~Styles for rules thickness
+
+\verb|v0.1.7|~:~~~~New feature for french paper \textsf{PleinePageCinqCinq}
+
+\verb|v0.1.6|~:~~~~Possibility to automatically determine L\&C based on the remaining space.
+
+\verb|v0.1.4|~:~~~~New \texttt{[keys]} + enhancements for paragraphs, for french version (for the moment\dots)
+
+\verb|v0.1.4|~:~~~~\texttt{xcolor} isn't loaded with \textsf{[table,svgnames]})
 
 \verb|v0.1.3|~:~~~~Command to display a grid (w/o writing on it)
 
